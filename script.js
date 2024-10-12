@@ -1,4 +1,53 @@
 var projectedMonthlyExpensesAtRetirement;
+let socialSecurityStartingMonthlyBenefit;
+let accumulationData = [];
+
+
+function estimateSocialSecurityBenefit(averageIndexedMonthlyEarnings, fullRetirementAge, retirementAge) {
+    // Constants
+    const FIRST_BEND_POINT = 1024;
+    const SECOND_BEND_POINT = 6172;
+    const FIRST_MULTIPLIER = 0.9;
+    const SECOND_MULTIPLIER = 0.32;
+    const THIRD_MULTIPLIER = 0.15;
+
+    // Calculate PIA (Primary Insurance Amount)
+    let pia = 0;
+    if (averageIndexedMonthlyEarnings <= FIRST_BEND_POINT) {
+        pia = averageIndexedMonthlyEarnings * FIRST_MULTIPLIER;
+    } else if (averageIndexedMonthlyEarnings <= SECOND_BEND_POINT) {
+        pia = (FIRST_BEND_POINT * FIRST_MULTIPLIER) +
+            ((averageIndexedMonthlyEarnings - FIRST_BEND_POINT) * SECOND_MULTIPLIER);
+    } else {
+        pia = (FIRST_BEND_POINT * FIRST_MULTIPLIER) +
+            ((SECOND_BEND_POINT - FIRST_BEND_POINT) * SECOND_MULTIPLIER) +
+            ((averageIndexedMonthlyEarnings - SECOND_BEND_POINT) * THIRD_MULTIPLIER);
+    }
+
+    // Adjust for early or late retirement
+    const monthsAdjustment = (retirementAge - fullRetirementAge) * 12;
+    let adjustmentFactor = 1;
+
+    if (monthsAdjustment < 0) {
+        // Early retirement reduction
+        adjustmentFactor = 1 - (Math.abs(monthsAdjustment) * (5/9) * 0.01);
+    } else if (monthsAdjustment > 0) {
+        // Delayed retirement credits
+        adjustmentFactor = 1 + (monthsAdjustment * (8/12) * 0.01);
+    }
+
+    // Calculate final benefit
+    const estimatedBenefit = pia * adjustmentFactor;
+
+    return Math.round(estimatedBenefit * 100) / 100; // Round to 2 decimal places
+}
+
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+});
 
 function openTab(evt, tabName) {
   var i, tabContent, tabLinks;
@@ -19,9 +68,24 @@ function openTab(evt, tabName) {
   }
 }
 
+// This is for calculating social security payout
+function calculateAverageMonthlyIncomeOverLife(data) {
+
+    if (data.length === 0) {
+        return 0; // Check if the array is empty
+    }
+
+    // Use reduce to sum up all income values
+    const totalIncome = data.reduce((sum, entry) => sum + entry.income, 0);
+
+    // Calculate and return the average
+    const yearlyAverageIncom = totalIncome / data.length;
+    return yearlyAverageIncom / 12;
+}
+
 function calculateAccumulationPhase() {
   const inputs = getAccumulationInputValues();
-  const accumulationData = [];
+  accumulationData = [];
   let currentValues = {
     savings: inputs.currentSavings,
     income: inputs.annualIncome,
@@ -69,6 +133,15 @@ function calculateAccumulationPhase() {
 function calculateDistributionPhase() {
   const inputs = getDistributionInputValues();
   const distributionData = [];
+
+  // calculate starting social security amount. fill
+  // in the DOM element and provide a bit of info about this
+  const aime = calculateAverageMonthlyIncomeOverLife(accumulationData); // Average Indexed Monthly Earnings
+  const fra = 67; // Full Retirement Age
+  const retirementAge = getAccumulationInputValues().retirementAge
+  socialSecurityStartingMonthlyBenefit = estimateSocialSecurityBenefit(aime, fra, retirementAge);
+  document.getElementById("monthlySocialSecurity").value = currencyFormatter.format(socialSecurityStartingMonthlyBenefit)
+
 
   let currentValues = {
     savings: inputs.retirementSavings,
@@ -135,9 +208,6 @@ function getDistributionInputValues() {
     monthlyBudget: parseFloat(
       document.getElementById("currentMonthlyExpenses").value
     ),
-    monthlySocialSecurity: parseFloat(
-      document.getElementById("monthlySocialSecurity").value.replace(/,/g, "")
-    ),
     otherIncome: parseFloat(
       document.getElementById("otherIncome").value.replace(/,/g, "")
     ),
@@ -173,26 +243,22 @@ function calculateAccumulationYearlyData(age, inputs, currentValues) {
 }
 
 function calculateDistributionYearlyData(age, inputs, currentValues) {
-  const { monthlySocialSecurity, otherIncome, postReturnRate, inflationRate } =
+  const { otherIncome, postReturnRate, inflationRate } =
     inputs;
+  
   const { savings, currentYear } = currentValues;
+  
+  const annualExpenses =  projectedMonthlyExpensesAtRetirement * 12 *
+     Math.pow(1 + inflationRate, age - inputs.retirementAge);
 
-  const annualExpenses =
-    projectedMonthlyExpensesAtRetirement *
-    12 *
-    Math.pow(1 + inflationRate, age - inputs.retirementAge);
-  const annualSocialSecurity =
-    monthlySocialSecurity *
-    12 *
-    Math.pow(1 + inflationRate, age - inputs.retirementAge);
-  const annualOtherIncome =
-    otherIncome * 12 * Math.pow(1 + inflationRate, age - inputs.retirementAge);
-
+  const annualSocialSecurity = socialSecurityStartingMonthlyBenefit * 12 *
+      Math.pow(1 + inflationRate, age - inputs.retirementAge);
+  
+  const annualOtherIncome = otherIncome * 12 * 
+      Math.pow(1 + inflationRate, age - inputs.retirementAge);
+  
   const investmentIncome = savings * postReturnRate;
-  const withdrawal = Math.max(
-    0,
-    annualExpenses - annualSocialSecurity - annualOtherIncome
-  );
+  const withdrawal = Math.max(0,annualExpenses - annualSocialSecurity - annualOtherIncome);
   const remainingSavings = savings + investmentIncome - withdrawal;
 
   return {
@@ -293,13 +359,6 @@ function updateDistributionChart(data) {
     },
   });
 }
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-});
 
 function updateAccumulationTable(data) {
   const tbody = document.querySelector("#accumulationTable tbody");
