@@ -25,11 +25,11 @@
             gap: 80px; /* This adds spacing between the columns */
         }
         .input-section {
-            flex: 3; /* This makes it take up 30% of the space */
+            flex: 2; /* This makes it take up 30% of the space */
             min-width: 250px;
         }
         .results-section {
-            flex: 7; /* This makes it take up 70% of the space */
+            flex: 8; /* This makes it take up 70% of the space */
             min-width: 300px;
         }
         h1 {
@@ -88,8 +88,12 @@
     </style>
 </head>
 <body>
+
+    <h1>Retirement Calculator</h1>
+    <p><em>Note: Tax brackets are estimated based on 2023 data with an annual adjustment for inflation.</em></p>
+
     <div class="container">
-        <h1>Retirement Calculator</h1>
+              
         <div class="input-section">
             <form id="retirementForm">
                 <h2>Required Fields</h2>
@@ -136,16 +140,20 @@
         <div class="results-section">
             <div id="results">
                 <div id="retirementAmountLabel" style="text-align: center; font-weight: bold; margin-bottom: 10px;"></div>
-                
+
                 <canvas id="retirementChart"></canvas>
                 <table id="retirementTable">
                     <thead>
                         <tr>
+                            <th>Year</th>
                             <th>Age</th>
                             <th>Start Amount</th>
                             <th>Contributions</th>
                             <th>End Amount</th>
                             <th>Change</th>
+                            <th>Tax Paid</th>
+                            <th>Pre-Tax Income</th>
+                            <th>After-Tax Income</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -154,10 +162,53 @@
         </div>
     </div>
     <script>
+
+        // tax logic for finding our gross pay after taxes
+        // we will generalize how much our incomes will change by a percentage
+        const baseTaxBrackets = [
+            { limit: 11000, rate: 0.10 },
+            { limit: 44725, rate: 0.12 },
+            { limit: 95375, rate: 0.22 },
+            { limit: 182100, rate: 0.24 },
+            { limit: 231250, rate: 0.32 },
+            { limit: 578125, rate: 0.35 },
+            { limit: Infinity, rate: 0.37 }
+        ];
+        const baseYear = 2023;
+        const bracketIncreaseRate = 0.025; // 2.5% annual increase, adjust as needed
+
         document.getElementById('retirementForm').addEventListener('submit', function(e) {
             e.preventDefault();
             calculateRetirement();
         });
+
+        function estimateTax(income, year) {
+            const brackets = getTaxBrackets(year);
+            let tax = 0;
+            let previousLimit = 0;
+
+            for (let bracket of brackets) {
+                if (income > bracket.limit) {
+                    tax += (bracket.limit - previousLimit) * bracket.rate;
+                } else {
+                    tax += (income - previousLimit) * bracket.rate;
+                    break;
+                }
+                previousLimit = bracket.limit;
+            }
+
+            return tax;
+        }
+
+        function getTaxBrackets(year) {
+            const yearsSinceBase = year - baseYear;
+            const inflationFactor = Math.pow(1 + bracketIncreaseRate, yearsSinceBase);
+            
+            return baseTaxBrackets.map(bracket => ({
+                limit: bracket.limit === Infinity ? Infinity : Math.round(bracket.limit * inflationFactor),
+                rate: bracket.rate
+            }));
+        }
 
         function calculateRetirement() {
             // Get input values
@@ -179,30 +230,54 @@
             let savings = currentSavings;
             let income = annualIncome;
             let contributions = monthlyContributions * 12;
+            let currentYear = new Date().getFullYear();
+
 
             for (let age = currentAge; age <= lifeExpectancy; age++) {
                 const isRetired = age >= retirementAge;
                 const returnRate = isRetired ? postReturnRate : preReturnRate;
                 const startAmount = savings;
+                let taxPaid = 0;
+                let preTaxIncome = isRetired ? (monthlyBudget * 12 + otherIncome) : income;
+                let afterTaxIncome = preTaxIncome;
 
                 if (!isRetired) {
+                    const incomeTax = estimateTax(income, currentYear);
+                    taxPaid = incomeTax;
+                    afterTaxIncome = income - incomeTax;
+
+                    const maxContribution = afterTaxIncome * 0.15;
+                    contributions = Math.min(contributions, maxContribution);
+
                     savings += contributions;
                     savings *= (1 + returnRate);
-                    income *= (1 + incomeIncrease);
+                    income *= (1 + incomeIncrease);  // Corrected from incomeIncome to incomeIncrease
                     contributions *= (1 + incomeIncrease);
                 } else {
-                    const yearlyBudget = (monthlyBudget * 12 - otherIncome) * Math.pow(1 + inflationRate, age - retirementAge);
-                    savings -= yearlyBudget;
+                    const incomeTax = estimateTax(preTaxIncome, currentYear);
+                    taxPaid = incomeTax;
+                    afterTaxIncome = preTaxIncome - incomeTax;
+
+                    const adjustedYearlyBudget = afterTaxIncome * Math.pow(1 + inflationRate, age - retirementAge);
+                    savings -= adjustedYearlyBudget;
                     savings *= (1 + returnRate);
                 }
 
+                
                 retirementData.push({
+                    year: currentYear,
                     age: age,
                     startAmount: startAmount,
                     contributions: isRetired ? 0 : contributions,
                     endAmount: savings,
-                    change: savings - startAmount
+                    change: savings - startAmount,
+                    taxPaid: taxPaid,
+                    preTaxIncome: preTaxIncome,
+                    afterTaxIncome: afterTaxIncome
                 });
+
+                currentYear++; // Move to the next year
+
             }
 
             // Update chart
@@ -282,15 +357,20 @@
             data.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
+                    <td>${row.year}</td>
                     <td>${row.age}</td>
                     <td>$${row.startAmount.toFixed(2)}</td>
                     <td>$${row.contributions.toFixed(2)}</td>
                     <td>$${row.endAmount.toFixed(2)}</td>
                     <td>$${row.change.toFixed(2)}</td>
+                    <td>$${row.taxPaid.toFixed(2)}</td>
+                    <td>$${row.preTaxIncome.toFixed(2)}</td>
+                    <td>$${row.afterTaxIncome.toFixed(2)}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
+
 
         // Initial calculation on page load
         document.addEventListener('DOMContentLoaded', calculateRetirement);
