@@ -85,6 +85,33 @@
                 padding-right: 0;
             }
         }
+
+        .money-input-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .dollar-sign {
+            padding: 8px;
+            background-color: #f0f0f0;
+            color: #333;
+            border-right: 1px solid #ddd;
+        }
+
+        .money-input-container input {
+            border: none;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .money-input-container input:focus {
+            outline: none;
+        }
+
+
     </style>
 </head>
 <body>
@@ -96,24 +123,52 @@
               
         <div class="input-section">
             <form id="retirementForm">
-                <h2>Required Fields</h2>
+                <h2>Retirement Variables</h2>
                 <label for="currentAge">Current Age:</label>
                 <input type="number" id="currentAge" value="35" required>
 
-                <label for="annualIncome">Annual Pre-tax Income:</label>
-                <input type="number" id="annualIncome" value="60000" required>
+                <div class="money-input-container">
+                    <label for="annualIncome">Annual Pre-tax Income:</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="annualIncome" value="60000" required>
+                </div>
 
-                <label for="currentSavings">Current Retirement Savings:</label>
-                <input type="number" id="currentSavings" value="30000" required>
 
-                <label for="monthlyContributions">Monthly Contributions:</label>
-                <input type="number" id="monthlyContributions" value="500" required>
+                <div class="money-input-container">
+                    <label for="currentSavings">Current Retirement Savings:</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="currentSavings" value="30000" required>
+                </div>
 
-                <label for="monthlyBudget">Monthly Budget in Retirement:</label>
-                <input type="number" id="monthlyBudget" value="2561" required>
 
-                <label for="otherIncome">Other Retirement Income (Optional):</label>
-                <input type="number" id="otherIncome" value="0">
+
+                <div class="money-input-container">
+                    <label for="monthlyContributions">Monthly Contributions:</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="monthlyContributions" value="500" required>
+                </div>
+
+
+
+
+                <div class="money-input-container">
+                    <label for="monthlyBudget">Monthly Budget in Retirement:</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="monthlyBudget" value="2561" required>
+                </div>
+
+
+
+
+                <div class="money-input-container">
+                    <label for="otherIncome">Other Retirement Income (Optional):</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="otherIncome" value="0" required>
+                </div>
+
+
+
+
 
                 <h2>Optional Fields</h2>
                 <label for="retirementAge">Retirement Age:</label>
@@ -177,10 +232,35 @@
         const baseYear = 2023;
         const bracketIncreaseRate = 0.025; // 2.5% annual increase, adjust as needed
 
+
+        const currencyFormatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
         document.getElementById('retirementForm').addEventListener('submit', function(e) {
             e.preventDefault();
             calculateRetirement();
         });
+
+        function setupMoneyInputListeners(input) {
+            input.addEventListener('input', function() {
+                this.value = formatMoney(this.value);
+            });
+
+            input.addEventListener('blur', function() {
+                this.value = formatMoney(this.value);
+            });
+        }
+
+        function formatMoney(value) {
+            value = value.replace(/\D/g, '');
+            if (value === '') return '';
+            
+            return parseInt(value, 10).toLocaleString('en-US');
+        }
 
         function estimateTax(income, year) {
             const brackets = getTaxBrackets(year);
@@ -213,7 +293,7 @@
         function calculateRetirement() {
             // Get input values
             const currentAge = parseInt(document.getElementById('currentAge').value);
-            const annualIncome = parseFloat(document.getElementById('annualIncome').value);
+            const annualIncome = parseFloat(document.getElementById('annualIncome').value.replace(/,/g, ''));
             const currentSavings = parseFloat(document.getElementById('currentSavings').value);
             const monthlyContributions = parseFloat(document.getElementById('monthlyContributions').value);
             const monthlyBudget = parseFloat(document.getElementById('monthlyBudget').value);
@@ -359,21 +439,32 @@
                 tr.innerHTML = `
                     <td>${row.year}</td>
                     <td>${row.age}</td>
-                    <td>$${row.startAmount.toFixed(2)}</td>
-                    <td>$${row.contributions.toFixed(2)}</td>
-                    <td>$${row.endAmount.toFixed(2)}</td>
-                    <td>$${row.change.toFixed(2)}</td>
-                    <td>$${row.taxPaid.toFixed(2)}</td>
-                    <td>$${row.preTaxIncome.toFixed(2)}</td>
-                    <td>$${row.afterTaxIncome.toFixed(2)}</td>
+                    <td>${currencyFormatter.format(row.startAmount)}</td>
+                    <td>${currencyFormatter.format(row.contributions)}</td>
+                    <td>${currencyFormatter.format(row.endAmount)}</td>
+                    <td>${currencyFormatter.format(row.change)}</td>
+                    <td>${currencyFormatter.format(row.taxPaid)}</td>
+                    <td>${currencyFormatter.format(row.preTaxIncome)}</td>
+                    <td>${currencyFormatter.format(row.afterTaxIncome)}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
+        function initializeMoneyInput(input) {
+            input.value = formatMoney(input.value);
+            setupMoneyInputListeners(input);
+        }
 
         // Initial calculation on page load
-        document.addEventListener('DOMContentLoaded', calculateRetirement);
+        document.addEventListener('DOMContentLoaded', function() {
+
+            calculateRetirement() // calculate chart and graph with default values
+
+            const moneyInputs = document.querySelectorAll('#annualIncome, #currentSavings, #monthlyContributions, #monthlyBudget, #otherIncome');
+            moneyInputs.forEach(initializeMoneyInput);
+        });
+
 
         // Event listener for form submission
         document.getElementById('retirementForm').addEventListener('submit', function(e) {
