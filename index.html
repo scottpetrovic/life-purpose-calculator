@@ -25,6 +25,12 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+
+        .small-notes {
+            font-size: 11px;
+            color: grey;
+        }
+
         h1, h2 {
             color: #333;
         }
@@ -146,47 +152,56 @@
 
         <div id="accumulation" class="tab-content active">
             <div class="input-section">
-                <h2>Variables</h2>
                 <form id="accumulationForm">
                     <div class="parameter-input-container">
-                        <label for="currentAge">Current Age:</label>
+                        <label for="currentAge">Current Age</label>
                         <input type="number" id="currentAge" value="35" required>
                     </div>
                     <div class="parameter-input-container">
-                        <label for="annualIncome">Annual Pre-tax Income:</label>
+                        <label for="annualIncome">Annual Pre-tax Income</label>
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="annualIncome" value="60000" required>
                         </span>
                     </div>
                     <div class="parameter-input-container">
-                        <label for="currentSavings">Current Retirement Savings:</label>
+                        <label for="currentSavings">Current Retirement Savings</label>
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="currentSavings" value="30000" required>
                         </span>
                     </div>
                     <div class="parameter-input-container">
-                        <label for="monthlyContributions">Monthly Investment Contribution:</label>
+                        <label for="monthlyContributions">Monthly Investment Contribution</label>
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="monthlyContributions" value="500" required>
                         </span>
                     </div>
+
                     <div class="parameter-input-container">
-                        <label for="retirementAge">Retirement Age:</label>
+                        <label for="currentMonthlyExpenses">Current Monthly Expenses</label>
+                        <span>
+                            <span class="dollar-sign">$</span>
+                            <input type="text" id="currentMonthlyExpenses" value="2000" required>
+                        </span>
+                        <span id="monthlyExpensesAtRetirement" class="small-notes"></span>
+                    </div>
+
+                    <div class="parameter-input-container">
+                        <label for="retirementAge">Retirement Age</label>
                         <input type="number" id="retirementAge" value="67">
                     </div>
                     <div class="parameter-input-container">
-                        <label for="preReturnRate">Pre-retirement Rate of Return (%):</label>
+                        <label for="preReturnRate">Pre-retirement Rate of Return (%)</label>
                         <input type="number" id="preReturnRate" value="6" step="0.1">
                     </div>
                     <div class="parameter-input-container">
-                        <label for="inflationRate">Inflation Rate (%):</label>
+                        <label for="inflationRate">Inflation Rate (%)</label>
                         <input type="number" id="inflationRate" value="3" step="0.1">
                     </div>
                     <div class="parameter-input-container">
-                        <label for="incomeIncrease">Annual Income Increase (%):</label>
+                        <label for="incomeIncrease">Annual Income Increase (%)</label>
                         <input type="number" id="incomeIncrease" value="2" step="0.1">
                     </div>
                     <button type="submit">Calculate Accumulation Phase</button>
@@ -215,46 +230,39 @@
 
         <div id="distribution" class="tab-content">
             <div class="input-section">
-                <h2>Variables</h2>
                 <form id="distributionForm">
                     <div class="parameter-input-container">
-                        <label for="retirementSavings">Retirement Savings:</label>
+                        <label for="retirementSavings">Starting Retirement Amount</label>
                         <span>
                             <span class="dollar-sign">$</span>
-                            <input type="text" id="retirementSavings" required>
+                            <input type="text" style="opacity: 0.5" id="retirementSavings" required disabled>
                         </span>
                     </div>
+
                     <div class="parameter-input-container">
-                        <label for="monthlyBudget">Monthly Expenses in Retirement:</label>
-                        <span>
-                            <span class="dollar-sign">$</span>
-                            <input type="text" id="monthlyBudget" value="2561" required>
-                        </span>
-                    </div>
-                    <div class="parameter-input-container">
-                        <label for="monthlySocialSecurity">Monthly Social Security Benefit:</label>
+                        <label for="monthlySocialSecurity">Monthly Social Security Benefit</label>
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="monthlySocialSecurity" value="1500" required>
                         </span>
                     </div>
                     <div class="parameter-input-container">
-                        <label for="otherIncome">Other Monthly Retirement Income:</label>
+                        <label for="otherIncome">Other Monthly Retirement Income</label>
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="otherIncome" value="0" required>
                         </span>
                     </div>
                     <div class="parameter-input-container">
-                        <label for="lifeExpectancy">Life Expectancy:</label>
+                        <label for="lifeExpectancy">Life Expectancy</label>
                         <input type="number" id="lifeExpectancy" value="95">
                     </div>
                     <div class="parameter-input-container">
-                        <label for="postReturnRate">Post-retirement Rate of Return (%):</label>
+                        <label for="postReturnRate">Post-retirement Rate of Return (%)</label>
                         <input type="number" id="postReturnRate" value="5" step="0.1">
                     </div>
                     <div class="parameter-input-container">
-                        <label for="inflationRateDistribution">Inflation Rate (%):</label>
+                        <label for="inflationRateDistribution">Inflation Rate (%)</label>
                         <input type="number" id="inflationRateDistribution" value="3" step="0.1">
                     </div>
                     <button type="submit">Calculate Distribution Phase</button>
@@ -285,25 +293,26 @@
     <script>
         // ... (Keep your existing JavaScript code here, we'll add new functions below)
 
+        var projectedMonthlyExpensesAtRetirement
 
         function openTab(evt, tabName) {
-        var i, tabContent, tabLinks;
-        tabContent = document.getElementsByClassName("tab-content");
-        for (i = 0; i < tabContent.length; i++) {
-            tabContent[i].style.display = "none";
-        }
-        tabLinks = document.getElementsByClassName("tab");
-        for (i = 0; i < tabLinks.length; i++) {
-            tabLinks[i].className = tabLinks[i].className.replace(" active", "");
-        }
-        document.getElementById(tabName).style.display = "flex";
-        evt.currentTarget.className += " active";
+            var i, tabContent, tabLinks;
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+            tabLinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tabLinks.length; i++) {
+                tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "flex";
+            evt.currentTarget.className += " active";
 
-        // Calculate distribution phase when switching to the distribution tab
-        if (tabName === 'distribution') {
-            calculateDistributionPhase();
+            // Calculate distribution phase when switching to the distribution tab
+            if (tabName === 'distribution') {
+                calculateDistributionPhase();
+            }
         }
-    }
 
     function calculateAccumulationPhase() {
         const inputs = getAccumulationInputValues();
@@ -327,14 +336,27 @@
             };
         }
 
+        // calculate the estimaged living expenses when the person retires
+        const yearsUntilRetirement = inputs.retirementAge - inputs.currentAge;
+        
+        projectedMonthlyExpensesAtRetirement = inputs.currentMonthlyExpenses * Math.pow(1 + inputs.inflationRate, yearsUntilRetirement);
+        document.getElementById('monthlyExpensesAtRetirement').innerHTML = 
+            `${ currencyFormatter.format(projectedMonthlyExpensesAtRetirement) } monthly expenses at retirement `;
+        document.getElementById('monthlyExpensesAtRetirement').value = projectedMonthlyExpensesAtRetirement
+        
+
         updateAccumulationChart(accumulationData);
         updateAccumulationTable(accumulationData);
         document.getElementById('retirementSavings').value = Math.round(accumulationData[accumulationData.length - 1].endAmount).toLocaleString('en-US');
     }
 
         function calculateDistributionPhase() {
+
+
         const inputs = getDistributionInputValues();
         const distributionData = [];
+
+
         let currentValues = {
             savings: inputs.retirementSavings,
             age: inputs.retirementAge,
@@ -370,14 +392,15 @@
                 retirementAge: parseInt(document.getElementById('retirementAge').value),
                 preReturnRate: parseFloat(document.getElementById('preReturnRate').value) / 100,
                 inflationRate: parseFloat(document.getElementById('inflationRate').value) / 100,
-                incomeIncrease: parseFloat(document.getElementById('incomeIncrease').value) / 100
+                incomeIncrease: parseFloat(document.getElementById('incomeIncrease').value) / 100,
+                currentMonthlyExpenses: parseFloat(document.getElementById('currentMonthlyExpenses').value.replace(/,/g, ''))
             };
         }
 
         function getDistributionInputValues() {
             return {
                 retirementSavings: parseFloat(document.getElementById('retirementSavings').value.replace(/,/g, '')),
-                monthlyBudget: parseFloat(document.getElementById('monthlyBudget').value.replace(/,/g, '')),
+                monthlyBudget: parseFloat(document.getElementById('currentMonthlyExpenses').value),
                 monthlySocialSecurity: parseFloat(document.getElementById('monthlySocialSecurity').value.replace(/,/g, '')),
                 otherIncome: parseFloat(document.getElementById('otherIncome').value.replace(/,/g, '')),
                 lifeExpectancy: parseInt(document.getElementById('lifeExpectancy').value),
@@ -409,16 +432,18 @@
     }
 
         function calculateDistributionYearlyData(age, inputs, currentValues) {
-            const { monthlyBudget, monthlySocialSecurity, otherIncome, postReturnRate, inflationRate } = inputs;
+            const { monthlySocialSecurity, otherIncome, postReturnRate, inflationRate } = inputs;
             const { savings, currentYear } = currentValues;
 
-            const annualExpenses = monthlyBudget * 12 * Math.pow(1 + inflationRate, age - inputs.retirementAge);
+            const annualExpenses = projectedMonthlyExpensesAtRetirement * 12 * Math.pow(1 + inflationRate, age - inputs.retirementAge);
             const annualSocialSecurity = monthlySocialSecurity * 12 * Math.pow(1 + inflationRate, age - inputs.retirementAge);
             const annualOtherIncome = otherIncome * 12 * Math.pow(1 + inflationRate, age - inputs.retirementAge);
-            
+
             const investmentIncome = savings * postReturnRate;
             const withdrawal = Math.max(0, annualExpenses - annualSocialSecurity - annualOtherIncome);
             const remainingSavings = savings + investmentIncome - withdrawal;
+
+
 
             return {
                 year: currentYear,
@@ -516,16 +541,18 @@
     }
 
 
-    function updateAccumulationTable(data) {
-        const tbody = document.querySelector('#accumulationTable tbody');
-        tbody.innerHTML = '';
-
-        const currencyFormatter = new Intl.NumberFormat('en-US', {
+    const currencyFormatter = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
         });
+
+    function updateAccumulationTable(data) {
+        const tbody = document.querySelector('#accumulationTable tbody');
+        tbody.innerHTML = '';
+
+
 
         data.forEach(row => {
             const tr = document.createElement('tr');
@@ -546,12 +573,6 @@
         const tbody = document.querySelector('#distributionTable tbody');
         tbody.innerHTML = '';
 
-        const currencyFormatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        });
 
         data.forEach(row => {
             const tr = document.createElement('tr');
