@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: grid;
+            gap: 10px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Retirement Calculator</h1>
+        <form id="retirementForm">
+            <h2>Required Fields</h2>
+            <label for="currentAge">Current Age:</label>
+            <input type="number" id="currentAge" value="30" required>
+
+            <label for="annualIncome">Annual Pre-tax Income:</label>
+            <input type="number" id="annualIncome" value="50000" required>
+
+            <label for="currentSavings">Current Retirement Savings:</label>
+            <input type="number" id="currentSavings" value="10000" required>
+
+            <label for="monthlyContributions">Monthly Contributions:</label>
+            <input type="number" id="monthlyContributions" value="500" required>
+
+            <label for="monthlyBudget">Monthly Budget in Retirement:</label>
+            <input type="number" id="monthlyBudget" value="3000" required>
+
+            <label for="otherIncome">Other Retirement Income (Optional):</label>
+            <input type="number" id="otherIncome" value="0">
+
+            <h2>Optional Fields</h2>
+            <label for="retirementAge">Retirement Age:</label>
+            <input type="number" id="retirementAge" value="67">
+
+            <label for="lifeExpectancy">Life Expectancy:</label>
+            <input type="number" id="lifeExpectancy" value="90">
+
+            <label for="preReturnRate">Pre-retirement Rate of Return (%):</label>
+            <input type="number" id="preReturnRate" value="6" step="0.1">
+
+            <label for="postReturnRate">Post-retirement Rate of Return (%):</label>
+            <input type="number" id="postReturnRate" value="4" step="0.1">
+
+            <label for="inflationRate">Inflation Rate (%):</label>
+            <input type="number" id="inflationRate" value="3" step="0.1">
+
+            <label for="incomeIncrease">Annual Income Increase (%):</label>
+            <input type="number" id="incomeIncrease" value="2" step="0.1">
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        <div id="results">
+            <canvas id="retirementChart"></canvas>
+            <table id="retirementTable">
+                <thead>
+                    <tr>
+                        <th>Age</th>
+                        <th>Start Amount</th>
+                        <th>Contributions</th>
+                        <th>End Amount</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('retirementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateRetirement();
+        });
+
+        function calculateRetirement() {
+            // Get input values
+            const currentAge = parseInt(document.getElementById('currentAge').value);
+            const annualIncome = parseFloat(document.getElementById('annualIncome').value);
+            const currentSavings = parseFloat(document.getElementById('currentSavings').value);
+            const monthlyContributions = parseFloat(document.getElementById('monthlyContributions').value);
+            const monthlyBudget = parseFloat(document.getElementById('monthlyBudget').value);
+            const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+            const retirementAge = parseInt(document.getElementById('retirementAge').value);
+            const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+            const preReturnRate = parseFloat(document.getElementById('preReturnRate').value) / 100;
+            const postReturnRate = parseFloat(document.getElementById('postReturnRate').value) / 100;
+            const inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
+            const incomeIncrease = parseFloat(document.getElementById('incomeIncrease').value) / 100;
+
+            // Calculate retirement data
+            const retirementData = [];
+            let savings = currentSavings;
+            let income = annualIncome;
+            let contributions = monthlyContributions * 12;
+
+            for (let age = currentAge; age <= lifeExpectancy; age++) {
+                const isRetired = age >= retirementAge;
+                const returnRate = isRetired ? postReturnRate : preReturnRate;
+                const startAmount = savings;
+
+                if (!isRetired) {
+                    savings += contributions;
+                    savings *= (1 + returnRate);
+                    income *= (1 + incomeIncrease);
+                    contributions *= (1 + incomeIncrease);
+                } else {
+                    const yearlyBudget = (monthlyBudget * 12 - otherIncome) * Math.pow(1 + inflationRate, age - retirementAge);
+                    savings -= yearlyBudget;
+                    savings *= (1 + returnRate);
+                }
+
+                retirementData.push({
+                    age: age,
+                    startAmount: startAmount,
+                    contributions: isRetired ? 0 : contributions,
+                    endAmount: savings,
+                    change: savings - startAmount
+                });
+            }
+
+            // Update chart
+            updateChart(retirementData, retirementAge);
+
+            // Update table
+            updateTable(retirementData);
+        }
+
+        function updateChart(data, retirementAge) {
+            const ctx = document.getElementById('retirementChart').getContext('2d');
+            
+            // Prepare data for the chart
+            const labels = data.map(d => d.age);
+            const whatYoullHave = data.map(d => d.endAmount / 1000); // Convert to thousands
+            const whatYoullNeed = data.map((d, i) => {
+                if (d.age < retirementAge) return null;
+                const yearsInRetirement = i - (retirementAge - data[0].age);
+                return data[retirementAge - data[0].age].endAmount * Math.pow(1 - 0.04, yearsInRetirement) / 1000; // 4% withdrawal rate
+            });
+
+            // Destroy existing chart if it exists
+            if (retirementChart instanceof Chart) {
+                retirementChart.destroy();
+            }
+
+            retirementChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'What You\'ll Have',
+                        data: whatYoullHave,
+                        borderColor: 'green',
+                        fill: false
+                    }, {
+                        label: 'What You\'ll Need',
+                        data: whatYoullNeed,
+                        borderColor: 'blue',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Age'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Amount (thousands)'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+
+
+        function updateTable(data) {
+            const tbody = document.querySelector('#retirementTable tbody');
+            tbody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.age}</td>
+                    <td>$${row.startAmount.toFixed(2)}</td>
+                    <td>$${row.contributions.toFixed(2)}</td>
+                    <td>$${row.endAmount.toFixed(2)}</td>
+                    <td>$${row.change.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Initial calculation on page load
+        document.addEventListener('DOMContentLoaded', calculateRetirement);
+
+        // Event listener for form submission
+        document.getElementById('retirementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateRetirement();
+        });
+
+
+    </script>
+</body>
+</html>
