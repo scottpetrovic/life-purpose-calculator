@@ -94,19 +94,19 @@
             <form id="retirementForm">
                 <h2>Required Fields</h2>
                 <label for="currentAge">Current Age:</label>
-                <input type="number" id="currentAge" value="30" required>
+                <input type="number" id="currentAge" value="35" required>
 
                 <label for="annualIncome">Annual Pre-tax Income:</label>
-                <input type="number" id="annualIncome" value="50000" required>
+                <input type="number" id="annualIncome" value="60000" required>
 
                 <label for="currentSavings">Current Retirement Savings:</label>
-                <input type="number" id="currentSavings" value="10000" required>
+                <input type="number" id="currentSavings" value="30000" required>
 
                 <label for="monthlyContributions">Monthly Contributions:</label>
                 <input type="number" id="monthlyContributions" value="500" required>
 
                 <label for="monthlyBudget">Monthly Budget in Retirement:</label>
-                <input type="number" id="monthlyBudget" value="3000" required>
+                <input type="number" id="monthlyBudget" value="2561" required>
 
                 <label for="otherIncome">Other Retirement Income (Optional):</label>
                 <input type="number" id="otherIncome" value="0">
@@ -116,13 +116,13 @@
                 <input type="number" id="retirementAge" value="67">
 
                 <label for="lifeExpectancy">Life Expectancy:</label>
-                <input type="number" id="lifeExpectancy" value="90">
+                <input type="number" id="lifeExpectancy" value="95">
 
                 <label for="preReturnRate">Pre-retirement Rate of Return (%):</label>
                 <input type="number" id="preReturnRate" value="6" step="0.1">
 
                 <label for="postReturnRate">Post-retirement Rate of Return (%):</label>
-                <input type="number" id="postReturnRate" value="4" step="0.1">
+                <input type="number" id="postReturnRate" value="5" step="0.1">
 
                 <label for="inflationRate">Inflation Rate (%):</label>
                 <input type="number" id="inflationRate" value="3" step="0.1">
@@ -135,6 +135,8 @@
         </div>
         <div class="results-section">
             <div id="results">
+                <div id="retirementAmountLabel" style="text-align: center; font-weight: bold; margin-bottom: 10px;"></div>
+                
                 <canvas id="retirementChart"></canvas>
                 <table id="retirementTable">
                     <thead>
@@ -208,6 +210,8 @@
 
             // Update table
             updateTable(retirementData);
+
+            updateRetirementAmountLabel(retirementData, retirementAge);
         }
 
         function updateChart(data, retirementAge) {
@@ -264,6 +268,13 @@
             });
         }
 
+        function updateRetirementAmountLabel(data, retirementAge) {
+            const retirementData = data.find(d => d.age === retirementAge);
+            if (retirementData) {
+                const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(retirementData.endAmount);
+                document.getElementById('retirementAmountLabel').textContent = `At retirement (age ${retirementAge}), you'll have: ${formattedAmount}`;
+            }
+        }
 
         function updateTable(data) {
             const tbody = document.querySelector('#retirementTable tbody');
