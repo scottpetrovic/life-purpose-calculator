@@ -41,7 +41,7 @@
             gap: 10px;
         }
         label {
-            font-weight: bold;
+            font-size: 13px;
         }
         input[type="number"] {
             width: 100%;
@@ -86,28 +86,27 @@
             }
         }
 
-        .money-input-container {
+        .parameter-input-container {
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            row-gap: 5px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            overflow: hidden;
+            padding: 1rem;
         }
 
         .dollar-sign {
-            padding: 8px;
-            background-color: #f0f0f0;
             color: #333;
-            border-right: 1px solid #ddd;
         }
 
-        .money-input-container input {
-            border: none;
-            padding: 8px;
-            width: 100%;
+        .parameter-input-container input {
+            padding: 12px;
+            background: #f3f3f3;
+            border: 0;
+            box-sizing: border-box;
         }
 
-        .money-input-container input:focus {
+        .parameter-input-container input:focus {
             outline: none;
         }
 
@@ -156,6 +155,7 @@
 
 .income-column {
     background-color: #f5fff5;
+    line-height: 1.1;
 }
 
 .balance-column {
@@ -195,54 +195,75 @@
         <div class="input-section">
             <form id="retirementForm">
                 <h2>Retirement Variables</h2>
-                <label for="currentAge">Current Age:</label>
-                <input type="number" id="currentAge" value="35" required>
+               
+                
 
-                <div class="money-input-container">
+                <div class="parameter-input-container">
+                    <label for="currentAge">Current Age:</label>
+                    <input type="number" id="currentAge" value="35" required>
+                </div>
+
+
+                <div class="parameter-input-container">
                     <label for="annualIncome">Annual Pre-tax Income:</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="annualIncome" value="60000" required>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="annualIncome" value="60000" required>
+                    </span>
                 </div>
 
 
-                <div class="money-input-container">
+                <div class="parameter-input-container">
                     <label for="currentSavings">Current Retirement Savings:</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="currentSavings" value="30000" required>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="currentSavings" value="30000" required>
+                    </span>
                 </div>
 
 
 
-                <div class="money-input-container">
-                    <label for="monthlyContributions">Monthly Contributions:</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="monthlyContributions" value="500" required>
+                <div class="parameter-input-container">
+                    <label for="monthlyContributions">Monthly Investment Contribution:</label>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="monthlyContributions" value="500" required>
+                    </span>
                 </div>
 
-                <div class="money-input-container">
-                    <label for="monthlyBudgetPre">Monthly Budget in Pre-retirement:</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="monthlyBudgetPre" value="2000" required>
+                <div class="parameter-input-container">
+                    <label for="monthlyBudgetPre">Monthly Expenses in Pre-retirement:</label>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="monthlyBudgetPre" value="2000" required>
+                    </span>
+
                 </div>
 
 
-                <div class="money-input-container">
-                    <label for="monthlyBudget">Monthly Budget in Retirement:</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="monthlyBudget" value="2561" required>
+                <div class="parameter-input-container">
+                    <label for="monthlyBudget">Monthly Expenses in Retirement:</label>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="monthlyBudget" value="2561" required>
+                    </span>
                 </div>
 
 
-                <div class="money-input-container">
-                    <label for="monthlySocialSecurity">Estimated Monthly Social Security Benefit:</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="monthlySocialSecurity" value="1500" required>
+                <div class="parameter-input-container">
+                    <label for="monthlySocialSecurity">Monthly Social Security Benefit:</label>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="monthlySocialSecurity" value="1500" required>
+                    </span>
                 </div>
 
-                <div class="money-input-container">
-                    <label for="otherIncome">Other Retirement Income (Optional):</label>
-                    <span class="dollar-sign">$</span>
-                    <input type="text" id="otherIncome" value="0" required>
+                <div class="parameter-input-container">
+                    <label for="otherIncome">Other Retirement Income:</label>
+                    <span>
+                        <span class="dollar-sign">$</span>
+                        <input type="text" id="otherIncome" value="0" required>
+                    </span>
                 </div>
 
 
@@ -250,23 +271,36 @@
 
 
                 <h2>Optional Fields</h2>
-                <label for="retirementAge">Retirement Age:</label>
-                <input type="number" id="retirementAge" value="67">
 
+                <div class="parameter-input-container"> 
+                    <label for="retirementAge">Retirement Age:</label>
+                    <input type="number" id="retirementAge" value="67">
+                </div>
+
+                <div class="parameter-input-container">
                 <label for="lifeExpectancy">Life Expectancy:</label>
                 <input type="number" id="lifeExpectancy" value="95">
+                    </div>
 
-                <label for="preReturnRate">Pre-retirement Rate of Return (%):</label>
-                <input type="number" id="preReturnRate" value="6" step="0.1">
+                <div class="parameter-input-container">
+                    <label for="preReturnRate">Pre-retirement Rate of Return (%):</label>
+                    <input type="number" id="preReturnRate" value="6" step="0.1">
+                </div>
 
-                <label for="postReturnRate">Post-retirement Rate of Return (%):</label>
-                <input type="number" id="postReturnRate" value="5" step="0.1">
+                <div class="parameter-input-container">
+                    <label for="postReturnRate">Post-retirement Rate of Return (%):</label>
+                    <input type="number" id="postReturnRate" value="5" step="0.1">
+                </div>
 
-                <label for="inflationRate">Inflation Rate (%):</label>
-                <input type="number" id="inflationRate" value="3" step="0.1">
+                <div class="parameter-input-container">
+                    <label for="inflationRate">Inflation Rate (%):</label>
+                    <input type="number" id="inflationRate" value="3" step="0.1">
+                </div>
 
-                <label for="incomeIncrease">Annual Income Increase (%):</label>
-                <input type="number" id="incomeIncrease" value="2" step="0.1">
+                <div class="parameter-input-container">
+                    <label for="incomeIncrease">Annual Income Increase (%):</label>
+                    <input type="number" id="incomeIncrease" value="2" step="0.1">
+                </div>
 
                 <button type="submit">Calculate</button>
             </form>
@@ -283,7 +317,7 @@
                             <th rowspan="2">Year</th>
                             <th rowspan="2">Age</th>
                             <th colspan="1" class="expense-header">Expenses</th>
-                            <th colspan="4" class="income-header">Income</th>
+                            <th colspan="5" class="income-header">Income</th>
                             <th colspan="2" class="balance-header">Balance</th>
                         </tr>
                         <tr>
@@ -292,6 +326,7 @@
                             <th class="income-column">After-Tax<br/>Income</th>
 
                             <th class="income-column">Investment<br/>Contributions</th>
+                            <th class="income-column">Investment<br/>Income</th>
                             <th class="income-column">Social Security<br/>Income</th>
                             <th class="balance-column">Start Amount</th>
                             <th class="balance-column">End Amount</th>
@@ -419,36 +454,57 @@
             let afterTaxIncome = preTaxIncome - taxPaid;
 
             let newSavings = savings;
+            let investmentIncome = 0;
+
             let newContributions = contributions;
             let newIncome = income;
 
+
             if (!isRetired) {
-                const availableForSavings = afterTaxIncome - (monthlyBudget * 12);
-                newSavings += newContributions;
-                newSavings *= (1 + returnRate);
+                //const availableForSavings = afterTaxIncome - (monthlyBudget * 12);
+                
+                // money made in stock market
+                investmentIncome = newSavings * returnRate; 
+                
+                // new money being thrown into investments for the year
+                newSavings += newContributions; 
+                newSavings += investmentIncome;
+
+                 // new paycheck after pay bump
                 newIncome *= (1 + incomeIncrease);
+
 
                 // don't increase new contributions each year. leave constnat
                 newContributions = contributions ;
                 // newContributions = Math.min(contributions, Math.max(0, availableForSavings));
                 // newContributions *= (1 + incomeIncrease);
+
+
             } else {
-                const totalIncome = afterTaxIncome;
-                const adjustedYearlyBudget = monthlyBudget * 12 * Math.pow(1 + inflationRate, age - retirementAge);
-                
-                if (totalIncome >= adjustedYearlyBudget) {
-                    // If income covers expenses, add excess to savings
-                    newSavings += (totalIncome - adjustedYearlyBudget);
-                } else {
-                    // If income doesn't cover expenses, withdraw from savings
-                    newSavings -= (adjustedYearlyBudget - totalIncome);
-                }
-                
-                newSavings *= (1 + returnRate);
+                // const totalIncome = afterTaxIncome;
+               
+                // if (totalIncome >= adjustedYearlyBudget) {
+                //     // If income covers expenses, add excess to savings
+                //     newSavings += (totalIncome - adjustedYearlyBudget);
+                // } else {
+                //     // If income doesn't cover expenses, withdraw from savings
+                //     newSavings -= (adjustedYearlyBudget - totalIncome);
+                // }
+
+                // money made in stock market with existing savings
+                investmentIncome = newSavings * returnRate; 
+                newSavings += investmentIncome;
+
+                newSavings += annualSocialSecurity // add social security to our savings pot
             }
 
              // Adjust for inflation
-            monthlyBudget *= (1 + inflationRate);
+             monthlyBudget *= (1 + inflationRate);
+
+             //newSavings -= monthlyBudget * 12 // subtract our yearly expenses from our savings
+            //const adjustedYearlyBudget = monthlyBudget * 12 * Math.pow(1 + inflationRate, age - retirementAge);
+
+
 
             return {
                 year: currentYear,
@@ -462,6 +518,7 @@
                 afterTaxIncome: afterTaxIncome,
                 newSavings: newSavings,
                 newIncome: newIncome,
+                investmentIncome: investmentIncome,
                 newContributions: newContributions,
                 socialSecurity: annualSocialSecurity,
                 monthlyBudget: monthlyBudget,
@@ -584,6 +641,7 @@
                     <td class="income-column">${currencyFormatter.format(row.preTaxIncome)}</td>
                     <td class="income-column">${currencyFormatter.format(row.afterTaxIncome)} <br/> <span class="taxes-data">${currencyFormatter.format(row.taxPaid)} taxes</span></td>
                     <td class="income-column">${currencyFormatter.format(row.contributions)}</td>
+                    <td class="income-column">${currencyFormatter.format(row.investmentIncome)}</td>
                     <td class="income-column">${currencyFormatter.format(row.socialSecurity)}</td>
                     <td class="">${currencyFormatter.format(row.startAmount)}</td>
                     <td class="">${currencyFormatter.format(row.endAmount)}</td>
