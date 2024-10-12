@@ -148,7 +148,11 @@
                     <input type="text" id="monthlyContributions" value="500" required>
                 </div>
 
-
+                <div class="money-input-container">
+                    <label for="monthlyBudgetPre">Monthly Budget in Pre-retirement:</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="monthlyBudgetPre" value="2000" required>
+                </div>
 
 
                 <div class="money-input-container">
@@ -158,7 +162,11 @@
                 </div>
 
 
-
+                <div class="money-input-container">
+                    <label for="monthlySocialSecurity">Estimated Monthly Social Security Benefit:</label>
+                    <span class="dollar-sign">$</span>
+                    <input type="text" id="monthlySocialSecurity" value="1500" required>
+                </div>
 
                 <div class="money-input-container">
                     <label for="otherIncome">Other Retirement Income (Optional):</label>
@@ -209,6 +217,9 @@
                             <th>Tax Paid</th>
                             <th>Pre-Tax Income</th>
                             <th>After-Tax Income</th>
+                            <th>Social Security</th>
+                            <th>Monthly Budget</th>
+
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -290,83 +301,124 @@
             }));
         }
 
-        function calculateRetirement() {
-            // Get input values
-            const currentAge = parseInt(document.getElementById('currentAge').value);
-            const annualIncome = parseFloat(document.getElementById('annualIncome').value.replace(/,/g, ''));
-            const currentSavings = parseFloat(document.getElementById('currentSavings').value);
-            const monthlyContributions = parseFloat(document.getElementById('monthlyContributions').value);
-            const monthlyBudget = parseFloat(document.getElementById('monthlyBudget').value);
-            const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
-            const retirementAge = parseInt(document.getElementById('retirementAge').value);
-            const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
-            const preReturnRate = parseFloat(document.getElementById('preReturnRate').value) / 100;
-            const postReturnRate = parseFloat(document.getElementById('postReturnRate').value) / 100;
-            const inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
-            const incomeIncrease = parseFloat(document.getElementById('incomeIncrease').value) / 100;
 
-            // Calculate retirement data
-            const retirementData = [];
-            let savings = currentSavings;
-            let income = annualIncome;
-            let contributions = monthlyContributions * 12;
-            let currentYear = new Date().getFullYear();
+        function getInputValues() {
+            return {
+                currentAge: parseInt(document.getElementById('currentAge').value),
+                annualIncome: parseFloat(document.getElementById('annualIncome').value.replace(/,/g, '')),
+                currentSavings: parseFloat(document.getElementById('currentSavings').value.replace(/,/g, '')),
+                monthlyContributions: parseFloat(document.getElementById('monthlyContributions').value.replace(/,/g, '')),
+                monthlyBudget: parseFloat(document.getElementById('monthlyBudget').value.replace(/,/g, '')),
+                monthlyBudgetPreretirement: parseFloat(document.getElementById('monthlyBudgetPre').value.replace(/,/g, '')),
+                otherIncome: parseFloat(document.getElementById('otherIncome').value.replace(/,/g, '')) || 0,
+                retirementAge: parseInt(document.getElementById('retirementAge').value),
+                lifeExpectancy: parseInt(document.getElementById('lifeExpectancy').value),
+                preReturnRate: parseFloat(document.getElementById('preReturnRate').value) / 100,
+                postReturnRate: parseFloat(document.getElementById('postReturnRate').value) / 100,
+                inflationRate: parseFloat(document.getElementById('inflationRate').value) / 100,
+                incomeIncrease: parseFloat(document.getElementById('incomeIncrease').value) / 100,
+                monthlySocialSecurity: parseFloat(document.getElementById('monthlySocialSecurity').value.replace(/,/g, ''))
+            };
+        }
 
+        
+        function calculateYearlyData(age, inputs, currentValues) {
+            const { retirementAge, preReturnRate, postReturnRate, inflationRate, incomeIncrease, monthlySocialSecurity } = inputs;
+            const { savings, income, contributions, currentYear } = currentValues;
 
-            for (let age = currentAge; age <= lifeExpectancy; age++) {
-                const isRetired = age >= retirementAge;
-                const returnRate = isRetired ? postReturnRate : preReturnRate;
-                const startAmount = savings;
-                let taxPaid = 0;
-                let preTaxIncome = isRetired ? (monthlyBudget * 12 + otherIncome) : income;
-                let afterTaxIncome = preTaxIncome;
+            const isRetired = age >= retirementAge;
+            const returnRate = isRetired ? postReturnRate : preReturnRate;
+            const startAmount = savings;
+            
+            let preTaxIncome = isRetired ? inputs.otherIncome : income;
+            let monthlyBudget = isRetired ? inputs.monthlyBudget : inputs.monthlyBudgetPreretirement; // Estimate pre-retirement monthly budget to 0 for now TODO
+            let annualSocialSecurity = 0;
 
-                if (!isRetired) {
-                    const incomeTax = estimateTax(income, currentYear);
-                    taxPaid = incomeTax;
-                    afterTaxIncome = income - incomeTax;
-
-                    const maxContribution = afterTaxIncome * 0.15;
-                    contributions = Math.min(contributions, maxContribution);
-
-                    savings += contributions;
-                    savings *= (1 + returnRate);
-                    income *= (1 + incomeIncrease);  // Corrected from incomeIncome to incomeIncrease
-                    contributions *= (1 + incomeIncrease);
-                } else {
-                    const incomeTax = estimateTax(preTaxIncome, currentYear);
-                    taxPaid = incomeTax;
-                    afterTaxIncome = preTaxIncome - incomeTax;
-
-                    const adjustedYearlyBudget = afterTaxIncome * Math.pow(1 + inflationRate, age - retirementAge);
-                    savings -= adjustedYearlyBudget;
-                    savings *= (1 + returnRate);
-                }
-
-                
-                retirementData.push({
-                    year: currentYear,
-                    age: age,
-                    startAmount: startAmount,
-                    contributions: isRetired ? 0 : contributions,
-                    endAmount: savings,
-                    change: savings - startAmount,
-                    taxPaid: taxPaid,
-                    preTaxIncome: preTaxIncome,
-                    afterTaxIncome: afterTaxIncome
-                });
-
-                currentYear++; // Move to the next year
-
+            if (isRetired) {
+                annualSocialSecurity = monthlySocialSecurity * 12;
+                preTaxIncome += annualSocialSecurity;
             }
 
-            // Update chart
-            updateChart(retirementData, retirementAge);
+            let taxPaid = estimateTax(preTaxIncome, currentYear);
+            let afterTaxIncome = preTaxIncome - taxPaid;
 
-            // Update table
+            let newSavings = savings;
+            let newContributions = contributions;
+            let newIncome = income;
+
+            if (!isRetired) {
+                const availableForSavings = afterTaxIncome - (monthlyBudget * 12);
+                newContributions = Math.min(contributions, Math.max(0, availableForSavings));
+                newSavings += newContributions;
+                newSavings *= (1 + returnRate);
+                newIncome *= (1 + incomeIncrease);
+                newContributions *= (1 + incomeIncrease);
+            } else {
+                const totalIncome = afterTaxIncome;
+                const adjustedYearlyBudget = monthlyBudget * 12 * Math.pow(1 + inflationRate, age - retirementAge);
+                
+                if (totalIncome >= adjustedYearlyBudget) {
+                    // If income covers expenses, add excess to savings
+                    newSavings += (totalIncome - adjustedYearlyBudget);
+                } else {
+                    // If income doesn't cover expenses, withdraw from savings
+                    newSavings -= (adjustedYearlyBudget - totalIncome);
+                }
+                
+                newSavings *= (1 + returnRate);
+            }
+
+             // Adjust for inflation
+            monthlyBudget *= (1 + inflationRate);
+
+            return {
+                year: currentYear,
+                age: age,
+                startAmount: startAmount,
+                contributions: isRetired ? 0 : newContributions,
+                endAmount: newSavings,
+                change: newSavings - startAmount,
+                taxPaid: taxPaid,
+                preTaxIncome: preTaxIncome,
+                afterTaxIncome: afterTaxIncome,
+                newSavings: newSavings,
+                newIncome: newIncome,
+                newContributions: newContributions,
+                socialSecurity: annualSocialSecurity,
+                monthlyBudget: monthlyBudget,
+            };
+        }
+
+        function calculateRetirement() {
+            const inputs = getInputValues();
+            const retirementData = [];
+            let currentValues = {
+                savings: inputs.currentSavings,
+                income: inputs.annualIncome,
+                contributions: inputs.monthlyContributions * 12,
+                currentYear: new Date().getFullYear()
+            };
+
+            for (let age = inputs.currentAge; age <= inputs.lifeExpectancy; age++) {
+                const yearData = calculateYearlyData(age, inputs, currentValues);
+                retirementData.push(yearData);
+                
+                currentValues = {
+                    savings: yearData.newSavings,
+                    income: yearData.newIncome,
+                    contributions: yearData.newContributions,
+                    currentYear: yearData.year + 1
+                };
+
+                if (yearData.newSavings <= 0) {
+                    console.log(`Retirement savings depleted at age ${age}`);
+                    break;
+                }
+            }
+
+            updateChart(retirementData, inputs.retirementAge);
             updateTable(retirementData);
-
-            updateRetirementAmountLabel(retirementData, retirementAge);
+            updateRetirementAmountLabel(retirementData, inputs.retirementAge);
         }
 
         function updateChart(data, retirementAge) {
@@ -446,6 +498,8 @@
                     <td>${currencyFormatter.format(row.taxPaid)}</td>
                     <td>${currencyFormatter.format(row.preTaxIncome)}</td>
                     <td>${currencyFormatter.format(row.afterTaxIncome)}</td>
+                    <td>${currencyFormatter.format(row.socialSecurity)}</td>
+                    <td>${currencyFormatter.format(row.monthlyBudget * 12)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -461,7 +515,7 @@
 
             calculateRetirement() // calculate chart and graph with default values
 
-            const moneyInputs = document.querySelectorAll('#annualIncome, #currentSavings, #monthlyContributions, #monthlyBudget, #otherIncome');
+            const moneyInputs = document.querySelectorAll('#annualIncome, #currentSavings, #monthlyContributions, #monthlyBudget, #otherIncome, #monthlyBudgetPreRetirement, #monthlySocialSecurity, #monthlyBudgetPre');
             moneyInputs.forEach(initializeMoneyInput);
         });
 
