@@ -1,0 +1,132 @@
+* {
+    font-size: 13px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+.container {
+    max-width: 1400px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.small-notes {
+    font-size: 11px;
+    color: grey;
+}
+
+h1, h2 {
+    color: #333;
+}
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #ddd;
+    border: none;
+    outline: none;
+}
+.tab.active {
+    background-color: #4CAF50;
+    color: white;
+}
+.tab-content {
+    display: none;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+.tab-content.active {
+    display: flex;
+}
+.input-section {
+    background: #e2f6ff;
+    padding: 1rem;
+}
+.results-section {
+    flex: 2;
+    min-width: 300px;
+}
+form {
+    display: grid;
+    gap: 10px;
+}
+label {
+
+}
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
+}
+#results {
+    margin-top: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+.parameter-input-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    /* border: 1px solid #ddd; */
+    border-radius: 4px;
+    padding: 1rem;
+    background: white;
+}
+.dollar-sign {
+    color: #333;
+}
+.parameter-input-container input {
+    padding: 12px;
+    background: #f3f3f3;
+    border: 0;
+    box-sizing: border-box;
+}
+.parameter-input-container input:focus {
+    outline: none;
+}
+#retirementTable th, #retirementTable td {
+    text-align: right;
+}
+.expense-header, .expense-column {
+    background-color: #ffeaea;
+}
+.income-header, .income-column {
+    background-color: #d8ffd8;
+}
+.balance-header, .balance-column {
+    background-color: #ecf5ff;
+}
