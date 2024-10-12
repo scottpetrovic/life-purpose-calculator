@@ -111,6 +111,77 @@
             outline: none;
         }
 
+        #retirementTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+
+
+
+
+#retirementTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#retirementTable th, #retirementTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+}
+
+#retirementTable th {
+    background-color: #f2f2f2;
+    text-align: center;
+}
+
+.expense-header, .expense-column, th.expense-column {
+    background-color: #ffeaea !important;
+}
+
+.income-header, .income-column, th.income-column {
+    background-color: #d8ffd8 !important;
+}
+
+.balance-header, .balance-column, th.balance-column {
+    background-color: #ecf5ff !important;
+}
+
+.expense-column {
+    background-color: #fff5f5;
+}
+
+.income-column {
+    background-color: #f5fff5;
+}
+
+.balance-column {
+    background-color: #f0f8ff;
+}
+
+#retirementTable tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+#retirementTable tbody tr:hover .expense-column {
+    background-color: #ffe5e5;
+}
+
+#retirementTable tbody tr:hover .income-column {
+    background-color: #e5ffe5;
+}
+
+#retirementTable tbody tr:hover .balance-column {
+    background-color: #e6f2ff;
+}
+
+.taxes-data {
+    font-size: 12px;
+    color: red;
+}
 
     </style>
 </head>
@@ -205,25 +276,30 @@
                 <div id="retirementAmountLabel" style="text-align: center; font-weight: bold; margin-bottom: 10px;"></div>
 
                 <canvas id="retirementChart"></canvas>
+    
                 <table id="retirementTable">
                     <thead>
                         <tr>
-                            <th>Year</th>
-                            <th>Age</th>
-                            <th>Start Amount</th>
-                            <th>Contributions</th>
-                            <th>End Amount</th>
-                            <th>Change</th>
-                            <th>Tax Paid</th>
-                            <th>Pre-Tax Income</th>
-                            <th>After-Tax Income</th>
-                            <th>Social Security</th>
-                            <th>Monthly Budget</th>
+                            <th rowspan="2">Year</th>
+                            <th rowspan="2">Age</th>
+                            <th colspan="1" class="expense-header">Expenses</th>
+                            <th colspan="4" class="income-header">Income</th>
+                            <th colspan="2" class="balance-header">Balance</th>
+                        </tr>
+                        <tr>
+                            <th class="expense-column">Expenses</th>
+                            <th class="income-column">Pre-Tax<br/>Income</th>
+                            <th class="income-column">After-Tax<br/>Income</th>
 
+                            <th class="income-column">Investment<br/>Contributions</th>
+                            <th class="income-column">Social Security<br/>Income</th>
+                            <th class="balance-column">Start Amount</th>
+                            <th class="balance-column">End Amount</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
+
             </div>
         </div>
     </div>
@@ -348,11 +424,14 @@
 
             if (!isRetired) {
                 const availableForSavings = afterTaxIncome - (monthlyBudget * 12);
-                newContributions = Math.min(contributions, Math.max(0, availableForSavings));
                 newSavings += newContributions;
                 newSavings *= (1 + returnRate);
                 newIncome *= (1 + incomeIncrease);
-                newContributions *= (1 + incomeIncrease);
+
+                // don't increase new contributions each year. leave constnat
+                newContributions = contributions ;
+                // newContributions = Math.min(contributions, Math.max(0, availableForSavings));
+                // newContributions *= (1 + incomeIncrease);
             } else {
                 const totalIncome = afterTaxIncome;
                 const adjustedYearlyBudget = monthlyBudget * 12 * Math.pow(1 + inflationRate, age - retirementAge);
@@ -483,27 +562,36 @@
             }
         }
 
+
+
         function updateTable(data) {
             const tbody = document.querySelector('#retirementTable tbody');
             tbody.innerHTML = '';
+
+            const currencyFormatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+
             data.forEach(row => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${row.year}</td>
                     <td>${row.age}</td>
-                    <td>${currencyFormatter.format(row.startAmount)}</td>
-                    <td>${currencyFormatter.format(row.contributions)}</td>
-                    <td>${currencyFormatter.format(row.endAmount)}</td>
-                    <td>${currencyFormatter.format(row.change)}</td>
-                    <td>${currencyFormatter.format(row.taxPaid)}</td>
-                    <td>${currencyFormatter.format(row.preTaxIncome)}</td>
-                    <td>${currencyFormatter.format(row.afterTaxIncome)}</td>
-                    <td>${currencyFormatter.format(row.socialSecurity)}</td>
-                    <td>${currencyFormatter.format(row.monthlyBudget * 12)}</td>
+                    <td class="expense-column">${currencyFormatter.format(row.monthlyBudget * 12)}</td>
+                    <td class="income-column">${currencyFormatter.format(row.preTaxIncome)}</td>
+                    <td class="income-column">${currencyFormatter.format(row.afterTaxIncome)} <br/> <span class="taxes-data">${currencyFormatter.format(row.taxPaid)} taxes</span></td>
+                    <td class="income-column">${currencyFormatter.format(row.contributions)}</td>
+                    <td class="income-column">${currencyFormatter.format(row.socialSecurity)}</td>
+                    <td class="">${currencyFormatter.format(row.startAmount)}</td>
+                    <td class="">${currencyFormatter.format(row.endAmount)}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
+
 
         function initializeMoneyInput(input) {
             input.value = formatMoney(input.value);
