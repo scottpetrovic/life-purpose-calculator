@@ -35,6 +35,14 @@ h1, h2 {
 
     font-weight: 100;
 }
+
+h2 {
+    font-size: 1.5rem;
+    background: #def6ff;
+    padding: 0.5rem 1rem;
+    box-sizing: content-box;
+}
+
 .tabs {
     display: flex;
     margin-bottom: 20px;

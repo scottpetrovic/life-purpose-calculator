@@ -7,21 +7,81 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link rel="stylesheet"  href="styles.css" />
     <link rel="stylesheet"  href="tooltip.css" />
+    <link rel="stylesheet"  href="dialog.css" />
 </head>
 <body>
     <div class="container">
 
         <div class="calculator-header">
-            <div>
-                <h1>Two-Phase Retirement Calculator</h1>
-                <p><em>Note: Tax brackets are estimated based on 2023 data with an annual adjustment for inflation.</em></p>
-            </div>
-    
+   
+            <h1 style="margin-bottom: 0">Two-Phase Retirement Calculator</h1>
+
             <div class="tabs">
                 <button class="tab active" onclick="openTab(event, 'accumulation')">Accumulation Phase</button>
                 <button class="tab" onclick="openTab(event, 'distribution')">Distribution Phase</button>
             </div>
         </div>
+
+      
+        <!-- instructions go here with to be seen with a dialog -->
+        <p>
+            Learn more about the <a href="#" class="open-dialog-link" id="openDialog">philosophy of retirement and money</a>.
+        </p>
+        <div id="dialogOverlay" class="dialog-overlay">
+            <div class="dialog">
+                <div class="dialog-header">
+                    <h2 class="dialog-title">Building Wealth vs. Living in the Moment</h2>
+                    <span class="close-button" id="closeDialog">&times;</span>
+                </div>
+                <div class="dialog-content">
+
+                    <!-- START TEXT-->
+
+                    <div class="retirement-perspectives">
+                      
+                        <p>This retirement calculator is broken apart into two distinct sections. Most calculators have everything in one graph, but this is not the best approach. There are two very different mindsets you need to think about with each one. Combining each mindset into one graph loses the essense with what retirement is.</p>
+                      
+                        <section class="perspective">
+                          <h2>Accumulation - Creating Wealth and Freedom</h2>
+                          <p>This approach emphasizes long-term financial growth and security.</p>
+                      
+                           <ul>
+                            <li>Prioritize saving and investing early in life</li>
+                            <li>Maximize contributions to retirement accounts (401(k)s, IRAs)</li>
+                            <li>Invest in a diversified portfolio for potential higher returns</li>
+                            <li>Delay gratification now for potentially greater financial freedom later</li>
+                            <li>Aim for a large nest egg to support a comfortable retirement lifestyle</li>
+                          </ul>      
+                        </section>
+                      
+                        <section class="perspective">
+                          <h2>Distribution - Enjoying Life Now</h2>
+                          <p>You have worked hard fulfilling someone else's business or dream. Now is time to do what you want. Think hard about spending money to help fulfill your dreams and aspirations.</p>
+                      
+                          <ul>
+                            <li>Accelerate your dreams by leveraging your accumulated wealth</li>
+                            <li>Invest in experiences that you've always wanted but couldn't afford before</li>
+                            <li>Use your financial power to create lasting memories and impacts</li>
+                            <li>Explore new passions or hobbies without financial constraints</li>
+                            <li>Consider how your wealth can open doors to new opportunities and adventures</li>
+                            <li>Balance enjoying your wealth now with ensuring long-term financial stability</li>
+                            <li>Use your resources to make meaningful changes in your life and others'</li>
+                          </ul>
+                                                 
+                        </section>
+
+                      </div>
+
+
+                    <!-- END TEXT-->
+
+                </div>
+            </div>
+        </div>
+        <!-- end dialog with instructions -->
+
+
+
 
 
         <div id="accumulation" class="tab-content active">
@@ -37,7 +97,7 @@
 
                             <span class="tooltip-container">
                                 <span class="tooltip-icon"> i </span>
-                                <span class="tooltip-text">Doesn't affect retirement calculations . Shown for informational purposes on the table view with tax rate</span>
+                                <span class="tooltip-text">Doesn't affect retirement calculations . Shown for informational purposes on the table view with tax rate. </span>
                             </span>
                             
                         </label>
@@ -114,7 +174,7 @@
 
                                     <span class="tooltip-container">
                                         <span class="tooltip-icon"> i </span>
-                                        <span class="tooltip-text">Doesn't affect retirement calculations. Shown for informational purposes</span>
+                                        <span class="tooltip-text">Doesn't affect retirement calculations. Shown for informational purposes. Tax brackets are estimated based on 2023 data with an annual adjustment for inflation.</span>
                                     </span>
 
                                 </th>
@@ -222,6 +282,7 @@
 
 
     <script src="TaxCalculator.js"></script> <!-- logic to help determine taxes -->
+    <script src="dialog.js"></script> <!-- logic to show and close learning dialog -->
     <script src="script.js"></script>
 
 </body>
