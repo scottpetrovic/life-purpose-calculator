@@ -109,25 +109,23 @@ function calculateAccumulationPhase() {
     };
   }
 
-  // calculate the estimaged living expenses when the person retires
+  // calculate the estimated living expenses when the person retires
   const yearsUntilRetirement = inputs.retirementAge - inputs.currentAge;
 
-  projectedMonthlyExpensesAtRetirement =
-    inputs.currentMonthlyExpenses *
+  projectedMonthlyExpensesAtRetirement = inputs.currentMonthlyExpenses *
     Math.pow(1 + inputs.inflationRate, yearsUntilRetirement);
-  document.getElementById(
-    "monthlyExpensesAtRetirement"
-  ).innerHTML = `${currencyFormatter.format(
-    projectedMonthlyExpensesAtRetirement
-  )} monthly expenses at retirement `;
+
+  document.getElementById( "monthlyExpensesAtRetirement").innerHTML = 
+    `${currencyFormatter.format(projectedMonthlyExpensesAtRetirement)} monthly expenses at retirement `;
+  
   document.getElementById("monthlyExpensesAtRetirement").value =
     projectedMonthlyExpensesAtRetirement;
 
   updateAccumulationChart(accumulationData);
   updateAccumulationTable(accumulationData);
+
   document.getElementById("retirementSavings").value = Math.round(
-    accumulationData[accumulationData.length - 1].endAmount
-  ).toLocaleString("en-US");
+    accumulationData[accumulationData.length - 1].endAmount).toLocaleString("en-US");
 }
 
 function calculateDistributionPhase() {
@@ -229,12 +227,16 @@ function calculateAccumulationYearlyData(age, inputs, currentValues) {
   const investmentIncome = savings * preReturnRate;
   const newSavings = savings + contributions + investmentIncome;
   const newIncome = income * (1 + incomeIncrease);
-  const newContributions = contributions * (1 + incomeIncrease);
+  const newContributions = contributions ; // flat contributions
+
+  const tax_calculator = new TaxCalculator();
+  const taxInformationForYear = tax_calculator.calculateEffectiveTaxRate(newIncome, currentYear);
 
   return {
     year: currentYear,
     age: age,
     income: newIncome,
+    taxedIncome: taxInformationForYear,
     contributions: newContributions,
     investmentIncome: investmentIncome,
     startAmount: startAmount,
@@ -369,7 +371,10 @@ function updateAccumulationTable(data) {
     tr.innerHTML = `
           <td>${row.year}</td>
           <td>${row.age}</td>
-          <td>${currencyFormatter.format(row.income)}</td>
+          <td>
+            ${currencyFormatter.format(row.income)}  
+            <span class="small-notes">(${row.taxedIncome.effectiveRatePercentage} effective tax)</span>
+          </td>
           <td>${currencyFormatter.format(row.contributions)}</td>
           <td>${currencyFormatter.format(row.investmentIncome)}</td>
           <td>${currencyFormatter.format(row.endAmount)}</td>
