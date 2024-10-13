@@ -274,6 +274,13 @@ function calculateDistributionYearlyData(age, inputs, currentValues) {
   };
 }
 
+function formatYAxis(value) {
+  if (value >= 1000) {
+    return '$' + (value / 1000).toFixed(2) + ' M';
+  } 
+  return '$' +  value + ' K';
+}
+
 function updateAccumulationChart(data) {
   const ctx = document.getElementById("accumulationChart").getContext("2d");
 
@@ -308,8 +315,13 @@ function updateAccumulationChart(data) {
         },
         y: {
           title: {
-            display: true,
-            text: "Amount (thousands)",
+            display: false,
+            text: "", // don't do a Y axis label as it should be obvious
+          },
+          ticks: {
+            callback: function(value, index, values) {             
+              return formatYAxis(value);
+            }
           },
           beginAtZero: true,
         },
@@ -317,6 +329,8 @@ function updateAccumulationChart(data) {
     },
   });
 }
+
+
 
 function updateDistributionChart(data) {
   const ctx = document.getElementById("distributionChart").getContext("2d");
@@ -352,8 +366,13 @@ function updateDistributionChart(data) {
         },
         y: {
           title: {
-            display: true,
-            text: "Amount (thousands)",
+            display: false,
+            text: "Amount",
+          },
+          ticks: {
+            callback: function(value, index, values) {             
+              return formatYAxis(value);
+            }
           },
           beginAtZero: true,
         },
