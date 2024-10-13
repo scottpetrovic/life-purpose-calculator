@@ -1,5 +1,6 @@
 * {
     font-size: 13px;
+    color: #516191;
 }
 
 body {
@@ -18,13 +19,21 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
+canvas {
+    max-height: 25rem;
+}
+
 .small-notes {
     font-size: 11px;
     color: grey;
 }
 
+h1 {
+    font-size: 2.2rem;
+}
 h1, h2 {
-    color: #333;
+
+    font-weight: 100;
 }
 .tabs {
     display: flex;
@@ -89,13 +98,17 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
 }
+table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 th {
-    background-color: #f2f2f2;
+    background-color: #e7fbff;
 }
 .parameter-input-container {
     display: flex;
@@ -129,4 +142,10 @@ th {
 }
 .balance-header, .balance-column {
     background-color: #ecf5ff;
+}
+
+.calculator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
 }
