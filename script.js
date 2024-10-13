@@ -260,8 +260,8 @@ function calculateDistributionYearlyData(age, inputs, currentValues) {
       Math.pow(1 + inflationRate, age - inputs.retirementAge);
   
   const investmentIncome = savings * postReturnRate;
-  const withdrawal = Math.max(0,annualExpenses - annualSocialSecurity - annualOtherIncome);
-  const remainingSavings = savings + investmentIncome - withdrawal;
+  const withdrawal = annualExpenses - annualSocialSecurity - annualOtherIncome - investmentIncome
+  const remainingSavings = savings - withdrawal;
 
   return {
     year: currentYear,
@@ -269,6 +269,7 @@ function calculateDistributionYearlyData(age, inputs, currentValues) {
     expenses: annualExpenses,
     socialSecurity: annualSocialSecurity,
     otherIncome: annualOtherIncome,
+    investmentIncome: investmentIncome,
     withdrawal: withdrawal,
     remainingSavings: remainingSavings,
   };
@@ -413,6 +414,7 @@ function updateDistributionTable(data) {
           <td>${row.age}</td>
           <td>${currencyFormatter.format(row.expenses)}</td>
           <td>${currencyFormatter.format(row.socialSecurity)}</td>
+          <td>${currencyFormatter.format(row.investmentIncome)}</td>
           <td>${currencyFormatter.format(row.otherIncome)}</td>
           <td>${currencyFormatter.format(row.withdrawal)}</td>
           <td>${currencyFormatter.format(row.remainingSavings)}</td>
