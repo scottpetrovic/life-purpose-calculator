@@ -13,11 +13,9 @@ The inspiration for creating this was a combination of reading financial books s
 - Effective tax rate calculation based off your pre-tax income
 - Some things to ponder. I need to spend more time developing this area
 
-## Building
-This is a pretty simple Node.js project, vanilla javascript using Vite as the web server. If you want to run it, these are the commands once you pull down the source code:
+## Building and running locally
+This is just a simple HTML, javascript, and CSS project. No web servers. No NPM. just open the index.html page in a web browser and everything should work.
 
-    npm install
-    npm run dev
 
 ## Todo
 - Need to spend more time to see if my calculations can be improved, or be more accurate.
