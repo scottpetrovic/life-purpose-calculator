@@ -1,6 +1,14 @@
 * {
-    font-size: 13px;
+    font-size: 15px;
     color: #516191;
+
+    font-family: "Afacad Flux", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings:
+      "slnt" 0;
+
 }
 
 body {
@@ -26,6 +34,11 @@ canvas {
 .small-notes {
     font-size: 11px;
     color: grey;
+}
+
+li {
+    line-height: 113%;
+    margin-bottom: 1rem;
 }
 
 h1 {
@@ -69,11 +82,18 @@ h2 {
 .input-section {
     background: #e2f6ff;
     padding: 1rem;
+    width: 235px
 }
 .results-section {
-    flex: 2;
+    flex: 3;
     min-width: 300px;
 }
+.recommendation-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+
 form {
     display: grid;
     gap: 10px;

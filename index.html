@@ -5,20 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Two-Phase Retirement Calculator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@500&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet"  href="styles.css" />
     <link rel="stylesheet"  href="tooltip.css" />
     <link rel="stylesheet"  href="dialog.css" />
+
+
 </head>
 <body>
     <div class="container">
 
         <div class="calculator-header">
    
-            <h1 style="margin-bottom: 0">Two-Phase Retirement Calculator</h1>
+            <h1 style="margin-bottom: 0">Life Purpose Planner Calculator</h1>
 
             <div class="tabs">
-                <button class="tab active" onclick="openTab(event, 'accumulation')">Accumulation Phase</button>
-                <button class="tab" onclick="openTab(event, 'distribution')">Distribution Phase</button>
+                <button class="tab active" onclick="openTab(event, 'accumulation')">Preparation Era</button>
+                <button class="tab" onclick="openTab(event, 'distribution')">Dream Era</button>
             </div>
         </div>
 
@@ -34,8 +44,6 @@
                     <span class="close-button" id="closeDialog">&times;</span>
                 </div>
                 <div class="dialog-content">
-
-                    <!-- START TEXT-->
 
                     <div class="retirement-perspectives">
                       
@@ -70,10 +78,7 @@
                                                  
                         </section>
 
-                      </div>
-
-
-                    <!-- END TEXT-->
+                    </div>
 
                 </div>
             </div>
@@ -195,6 +200,41 @@
                     </table>
                 </div>
             </div>
+
+            <div class="recommendation-section">
+                <h2>How much is enough?</h2>
+
+
+                <div class="advice-section">
+                    <p>If you think you won't have enough money:</p>
+                    <ul>
+                        <li>Start small: Remember, even minor savings can compound over time. Begin with what you can manage consistently.</li>
+                        <li>Automate your savings: Set up automatic transfers to your savings account, no matter how small the amount.</li>
+                        <li>Reduce expenses: Look for areas in your budget where you can cut back and redirect those funds to savings.</li>
+                        <li>Increase your earning potential: Explore additional income streams or invest in skills that could lead to higher earnings.</li>
+                        <li>Educate yourself: Learn about personal finance and basic investment strategies. Knowledge is a powerful tool for future wealth-building.</li>
+                        <li>Set clear goals: Define what you're saving for. Having concrete objectives can make saving more meaningful and motivating.</li>
+                        <li>Track your progress: Regularly review your savings to stay motivated and adjust your strategy as needed.</li>
+                    </ul>
+                </div>
+            
+                <div class="advice-section">
+                    <p>If you think you might have more money than you might need:</p>
+                    <ul>
+                        <li>Diversify your investments: Ensure your savings are working for you across various asset classes to manage risk and maximize returns.</li>
+                        <li>Invest in yourself: Consider allocating funds to personal development, education, or new skills that could enrich your Dream Era.</li>
+                        <li>Explore passive income: Look into opportunities that could provide ongoing income with minimal daily effort.</li>
+                        <li>Plan for transition: Start envisioning how you'll shift from saving to spending in your Dream Era. What dreams will you pursue?</li>
+                        <li>Balance present and future: Ensure you're not sacrificing too much current enjoyment. It's okay to use some resources for experiences now.</li>
+                        <li>Consider philanthropy: If you're comfortable with your savings level, think about causes or communities you might want to support.</li>
+                        <li>Seek professional advice: Consider consulting with a financial advisor to optimize your strategy and ensure you're on track for your goals.</li>
+                        <li>Reassess your goals: As your savings grow, take time to reevaluate what you want from your Dream Era. Your aspirations may have evolved.</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
         </div>
 
         <div id="distribution" class="tab-content">
@@ -277,6 +317,49 @@
                     </table>
                 </div>
             </div>
+
+            <div class="recommendation-section">
+                <h2>Budgeting or Dreaming?</h2>
+
+
+                <div class="advice-section">
+                    <p>For those with limited resources:</p>
+                    <ul>
+                        <li>Prioritize essentials: Focus on covering basic needs first - housing, food, healthcare, and essential bills.</li>
+                        <li>Create a detailed budget: Track every expense and look for areas where you can cut back without sacrificing quality of life.</li>
+                        <li>Explore part-time work or gigs: Consider flexible jobs that can supplement your income without overwhelming you.</li>
+                        <li>Leverage senior discounts: Take advantage of age-related discounts on services, entertainment, and travel.</li>
+                        <li>Downsize thoughtfully: Consider moving to a smaller home or a more affordable area to reduce living expenses.</li>
+                        <li>Embrace frugal living: Learn money-saving techniques like meal planning, DIY home maintenance, and energy conservation.</li>
+                        <li>Seek community resources: Look into local programs, libraries, and community centers that offer free or low-cost activities and services.</li>
+                        <li>Maintain health: Prioritize preventive healthcare to avoid costly medical issues down the line.</li>
+                        <li>Stay socially connected: Find low-cost ways to maintain friendships and family relationships, which are crucial for well-being.</li>
+                        <li>Continuous learning: Utilize free online resources to keep your mind active and learn new skills that could potentially lead to income opportunities.</li>
+                    </ul>
+                </div>
+            
+                <div class="advice-section">
+                    <p>For those with more than enough resources:</p>
+                    <ul>
+                        <li>Define your dreams: Take time to clearly articulate what you want to achieve or experience in this new phase of life.</li>
+                        <li>Create a dream budget: Allocate funds specifically for pursuing your aspirations, separate from your regular living expenses.</li>
+                        <li>Invest in experiences: Consider using resources for travel, learning new skills, or pursuing hobbies you've always wanted to try.</li>
+                        <li>Start a passion project: Fund a personal project, be it writing a book, starting a small business, or creating art.</li>
+                        <li>Give back: Consider using your resources to make a positive impact through philanthropy or volunteering.</li>
+                        <li>Legacy planning: Think about how you want to be remembered and allocate resources accordingly, whether it's to family, charity, or a cause you believe in.</li>
+                        <li>Upgrade your lifestyle thoughtfully: While you can afford luxuries, choose ones that align with your values and bring genuine joy.</li>
+                        <li>Explore second career options: If desired, invest in starting a new career or business that you're passionate about, without financial pressure.</li>
+                        <li>Health and wellness splurges: Consider high-quality healthcare options, wellness retreats, or personal trainers to maintain optimal health.</li>
+                        <li>Cultivate relationships: Use your resources to bring family and friends together for meaningful gatherings or shared experiences.</li>
+                        <li>Continual growth: Invest in ongoing education, whether it's taking university courses, attending workshops, or traveling to learn about different cultures.</li>
+                        <li>Financial safety net: While pursuing dreams, ensure you maintain a solid financial foundation for unexpected future needs.</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+
         </div>
     </div>
 
