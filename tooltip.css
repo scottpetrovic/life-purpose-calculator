@@ -30,6 +30,7 @@
     left: -150px;
     opacity: 0;
     transition: opacity 0.3s;
+    line-height: 110%;
   }
 
   .tooltip-text::after {

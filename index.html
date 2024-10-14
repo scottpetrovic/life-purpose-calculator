@@ -32,8 +32,8 @@
             </span>
 
             <div class="tabs">
-                <button class="tab active" onclick="openTab(event, 'accumulation')">Step 1: Accumulation</button>
-                <button class="tab" onclick="openTab(event, 'distribution')">Step 2: Distribution</button>
+                <button class="tab active" onclick="openTab(event, 'accumulation')">Accumulation Phase</button>
+                <button class="tab" onclick="openTab(event, 'distribution')">Distribution Phase</button>
             </div>
         </div>
 
@@ -94,6 +94,12 @@
         <div id="accumulation" class="tab-content active">
             <div class="input-section">
                 <form id="accumulationForm">
+
+                    <button class="calculate-button" type="submit">
+                        <img src="refresh-icon.svg" width="20px" height="20px" />
+                        Update
+                    </button>
+
                     <div class="parameter-input-container">
                         <label for="currentAge">Current Age</label>
                         <input type="number" id="currentAge" value="35" required>
@@ -104,7 +110,7 @@
 
                             <span class="tooltip-container">
                                 <span class="tooltip-icon"> i </span>
-                                <span class="tooltip-text">Doesn't affect retirement calculations . Shown for informational purposes on the table view with tax rate. </span>
+                                <span class="tooltip-text">Doesn't affect retirement calculations . Uses effective tax rate in table as opposed to marginal tax rate. </span>
                             </span>
                             
                         </label>
@@ -134,7 +140,7 @@
                         
                             <span class="tooltip-container">
                                 <span class="tooltip-icon"> i </span>
-                                <span class="tooltip-text">This will be used in the distribution phase once you hit retirement</span>
+                                <span class="tooltip-text">This will be used in the distribution phase once you hit retirement. Expected expenses are calculated based on the inflation rate you specify.</span>
                             </span>
                         
                         </label>
@@ -164,7 +170,7 @@
                         <input type="number" id="incomeIncrease" value="2" step="0.1">
                         <span style="position: absolute; right: 30px; top: 48px;">%</span>
                     </div>
-                    <button  type="submit">Calculate Accumulation Phase</button>
+
                 </form>
             </div>
             <div class="results-section">
@@ -181,7 +187,7 @@
 
                                     <span class="tooltip-container">
                                         <span class="tooltip-icon"> i </span>
-                                        <span class="tooltip-text">Doesn't affect retirement calculations. Shown for informational purposes. Tax brackets are estimated based on 2023 data with an annual adjustment for inflation.</span>
+                                        <span class="tooltip-text">Doesn't affect retirement calculations. Tax brackets are estimated based on 2023 data with an annual adjustment for inflation.</span>
                                     </span>
 
                                 </th>
@@ -256,6 +262,10 @@
             <div class="input-section">
                 <form id="distributionForm">
 
+                    <button class="calculate-button" id="calculate-distribution" type="submit">
+                        <img src="refresh-icon.svg" width="20px" height="20px" />
+                        Update</button>
+
                     <div class="parameter-input-container">
                         <label for="otherIncome">Other Monthly Retirement Income</label>
                         <span>
@@ -294,7 +304,7 @@
                         </span>
                     </div>
 
-                    <button type="submit">Calculate Distribution Phase</button>
+                 
                 </form>
             </div>
             <div class="results-section">

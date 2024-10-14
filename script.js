@@ -323,7 +323,7 @@ function updateAccumulationChart(data) {
       labels: labels,
       datasets: [
         {
-          label: "Retirement Savings",
+          label: "Investments",
           data: savings,
           borderColor: "#7dc2ff",
           borderWidth: 2,

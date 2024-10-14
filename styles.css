@@ -30,7 +30,7 @@ canvas {
 }
 
 .small-notes {
-  font-size: 11px;
+  font-size: 13px;
   color: grey;
 }
 
@@ -60,14 +60,14 @@ h2 {
     background-color: #f5f5f5;
     border: none;
     outline: none;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     border-radius: 0;
-    color: black;
+    color: #acb6c9;
     border: 1px solid #cbcbcb;
 }
 .tab.active {
-  background-color: #46af7d;
-  color: white;
+  background: linear-gradient(180deg, rgba(238, 255, 238, 1) 0%, rgba(184, 250, 184, 1) 100%);
+  color: rgb(68 94 107)
 }
 .tab-content {
   display: none;
@@ -204,6 +204,25 @@ th {
   padding: 0;
   color: white;
 }
+
+button.calculate-button {
+  background: linear-gradient(180deg, rgba(238, 255, 238, 1) 0%, rgba(184, 250, 184, 1) 100%);
+  padding: 1rem 2rem;
+  color: #16352b;
+  font-size: 1rem;
+  border: 0;
+  border-radius: 2rem;
+  box-shadow: 2px 2px 10px 0px #9d9df1;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  column-gap: 7px;
+}
+button.calculate-button:hover {
+  background: rgb(238,255,238);
+  background: linear-gradient(0deg, rgba(238,255,238,1) 0%, rgba(184,250,184,1) 100%);
+}
+
 
 /* accordion styles */
 :root {
