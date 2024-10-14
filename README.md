@@ -8,10 +8,16 @@ The inspiration for creating this was a combination of reading financial books s
 ## Some of the features 
 - Estimated living expenses at retirement - I always find this hard to quickly get to
 - Breaking apart the phase where you are accumulating wealth, and where you are spending and enjoying your money
-- A lot of normal fields and inputs 
+- A lot of normal fields and inputs that exist on most retirement calculators such as inflation rates, contributions, planned retirement age
 - Simplified Social security calculations to see how much you will be making at retirement
 - Effective tax rate calculation based off your pre-tax income
 - Some things to ponder. I need to spend more time developing this area
+
+## Building
+This is a pretty simple Node.js project, vanilla javascript using Vite as the web server. If you want to run it, these are the commands once you pull down the source code:
+
+    npm install
+    npm run dev
 
 ## Todo
 - Need to spend more time to see if my calculations can be improved, or be more accurate.
