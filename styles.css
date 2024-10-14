@@ -184,13 +184,31 @@ th {
   align-items: flex-start;
 }
 
+.main-section-callout {
+  text-align: center;
+  background: #7dc2ff;
+  padding: 1rem;
+}
+.main-section-callout h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 100%;
+}
+
+.large-callout-amount, .large-callout-amount span {
+  font-size: 2.8rem;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
 /* accordion styles */
 :root {
-    --main-accordion-bg-color: #7dc2ff;
+    --main-accordion-bg-color: #e4f2ff;
   }
 
 .accordion {
-  background-color: #f9f9f9;
   border-left: 5px solid var(--main-accordion-bg-color);
   margin-bottom: 20px;
 }
@@ -198,13 +216,13 @@ th {
     border-radius: 0;
 }
 .accordion-header {
-  background-color: var(--main-accordion-bg-color);
-  color: white;
+  background-color: white;
+  color: rgb(84, 127, 175);
   cursor: pointer;
   padding: 18px;
   width: 100%;
   text-align: left;
-  border: none;
+  border: 1px solid var(--main-accordion-bg-color);;
   outline: none;
   transition: 0.4s;
   position: relative;

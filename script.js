@@ -124,8 +124,11 @@ function calculateAccumulationPhase() {
   updateAccumulationChart(accumulationData);
   updateAccumulationTable(accumulationData);
 
+  // put the final amount that we saved for retirement in a couple areas
   document.getElementById("retirementSavings").value = Math.round(
     accumulationData[accumulationData.length - 1].endAmount).toLocaleString("en-US");
+    document.getElementById("retirementLastAccumulation").innerHTML =  document.getElementById("retirementSavings").value
+
 }
 
 function calculateDistributionPhase() {
@@ -168,6 +171,9 @@ function calculateDistributionPhase() {
       break;
     }
   }
+
+  // update the DOM element with the final value from the distrubution data with our final savings retirementLastDistribution ID
+  document.getElementById("retirementLastDistribution").innerHTML = Math.round(distributionData[distributionData.length - 1].remainingSavings).toLocaleString("en-US");
 
   updateDistributionChart(distributionData);
   updateDistributionTable(distributionData);

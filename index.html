@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Two-Phase Retirement Calculator</title>
+    <title>Life Purpose Calculator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
 
         <div class="calculator-header">
             <span>
-                <h1 style="margin: 0">Life Purpose Planner Calculator</h1>
+                <h1 style="margin: 0">Life Purpose Calculator</h1>
                 <!-- instructions go here with to be seen with a dialog -->
                 <p style="margin-top: 0">
                     Learn more about the <a href="#" class="open-dialog-link" id="openDialog">philosophy of retirement and money</a>.
@@ -204,11 +204,17 @@
             </div>
 
             <div class="recommendation-section">
-                <h2>How much is enough?</h2>
+
+                <div class="main-section-callout" id="accumulation-data-executive">
+                    <h3>What you will have</h3>
+                    <p class="large-callout-amount"><span style="margin-right: 0.5rem; opacity: 0.5">$</span><span id="retirementLastAccumulation">234,000</span></p>
+                </div>
+
+                <h2>Deep Questions</h2>
 
 
                 <div class="accordion">
-                    <button class="accordion-header">If you think you won't have enough money</button>
+                    <button class="accordion-header">I don't think I have enough</button>
                     <div class="accordion-content">   
                         <ul>
                             <li>Start small: Remember, even minor savings can compound over time. Begin with what you can manage consistently.</li>
@@ -226,7 +232,7 @@
 
 
                 <div class="accordion">
-                    <button class="accordion-header">If you think you might have more money than you might need:</button>
+                    <button class="accordion-header">I have more than I need</button>
                     <div class="accordion-content">   
                         <ul>
                             <li>Diversify your investments: Ensure your savings are working for you across various asset classes to manage risk and maximize returns.</li>
@@ -328,6 +334,12 @@
             </div>
 
             <div class="recommendation-section">
+
+                <div class="main-section-callout">
+                    <h3>What you will die with</h3>
+                    <p class="large-callout-amount"><span style="margin-right: 0.5rem; opacity: 0.5">$</span><span id="retirementLastDistribution">234,000</span></p>
+                </div>
+
                 <h2>Budgeting or Dreaming?</h2>
 
 
