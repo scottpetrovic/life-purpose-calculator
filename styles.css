@@ -280,3 +280,19 @@ button.calculate-button:hover {
     line-height: 113%;
     margin-top: 1rem;
   }
+
+
+
+  /* github */
+  a#github-link {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.5;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+#github-link:hover {
+  opacity: 1;
+}

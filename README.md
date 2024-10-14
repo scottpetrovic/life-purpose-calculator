@@ -1,6 +1,9 @@
 # Life Purpose Calculator
 ![Life Purpose Calculator](readme.png "Life Purpose Calculator")
 
+Check it out here: https://scottpetrovic.github.io/blog/projects/life-planner/
+
+
 This is a small little project I made while looking through some retirement calculators online. The sites I visited always seemed to be missing some things I was interested in, so I just made a simple calculator.
 
 The inspiration for creating this was a combination of reading financial books such as Die with Zero by Bill Perkins, and just thinking about the concept of retirement and savings. Not sure if this little webpage will help anyone, but thought I would throw it on the internet.
