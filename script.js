@@ -167,13 +167,25 @@ function calculateDistributionPhase() {
     };
 
     if (yearData.remainingSavings <= 0) {
-      console.log(`Retirement savings depleted at age ${age}`);
+      // console.log(`Retirement savings depleted at age ${age}`);
       break;
     }
   }
 
   // update the DOM element with the final value from the distrubution data with our final savings retirementLastDistribution ID
   document.getElementById("retirementLastDistribution").innerHTML = Math.round(distributionData[distributionData.length - 1].remainingSavings).toLocaleString("en-US");
+
+  // find out if we ran out of money before we hit retirement age. Find the age if we did
+  let ageRanOutOfMoney = distributionData.findIndex((element) => element.remainingSavings <= 0);
+
+  if(ageRanOutOfMoney !== -1) {
+    document.getElementById("ran-out-of-money-message").innerHTML = `You ran out of money at age ${ageRanOutOfMoney + inputs.retirementAge}`; 
+    document.getElementById("distribution-final-amount").style.display = "none";
+  } else {
+    document.getElementById("ran-out-of-money-message").innerHTML = `What you will die with`;
+    document.getElementById("distribution-final-amount").style.display = "block";
+  }
+
 
   updateDistributionChart(distributionData);
   updateDistributionTable(distributionData);

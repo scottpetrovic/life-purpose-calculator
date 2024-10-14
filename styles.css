@@ -192,8 +192,10 @@ th {
 .main-section-callout h3 {
   color: white;
   margin: 0;
-  font-size: 1.6rem;
+  padding: 0rem 1rem;
+  font-size: 1.3rem;
   line-height: 100%;
+  padding-top: 1rem;
 }
 
 .large-callout-amount, .large-callout-amount span {
