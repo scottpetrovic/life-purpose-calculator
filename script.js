@@ -300,6 +300,8 @@ function formatYAxis(value) {
   return '$' +  value + ' K';
 }
 
+
+
 function updateAccumulationChart(data) {
   const ctx = document.getElementById("accumulationChart").getContext("2d");
 
@@ -310,6 +312,11 @@ function updateAccumulationChart(data) {
     window.accumulationChart.destroy();
   }
 
+  // Create a linear gradient
+  const gradient = ctx.createLinearGradient(0, 0, 0, 400); // Adjust the coordinates as needed
+  gradient.addColorStop(0, 'rgba(75, 192, 192, 0.5)'); // Start color
+  gradient.addColorStop(1, 'rgba(75, 192, 192, 0.03)'); // End color
+
   window.accumulationChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -318,13 +325,37 @@ function updateAccumulationChart(data) {
         {
           label: "Retirement Savings",
           data: savings,
-          borderColor: "green",
-          fill: false,
+          borderColor: "#7dc2ff",
+          borderWidth: 2,
+          fill: true,
+          backgroundColor: gradient, // Fill color (with transparency)
+          pointBackgroundColor:'#7dc2ff', // Color of the data points
+          pointRadius: 4, // Size of the points
         },
       ],
     },
     options: {
       responsive: true,
+      plugins: {
+        tooltip: {
+            backgroundColor: 'rgba(240, 240, 240, 1.0)', // Background color
+            titleColor: '#000', // Title text color
+            bodyColor: '#000', // Body text color
+            borderColor: 'rgba(255, 255, 255, 0.5)', // Border color
+            borderWidth: 1, // Border width
+            padding: 20, // Padding inside the tooltip
+            cornerRadius: 5, // Rounded corners
+            displayColors: false, // Hide color boxes
+            callbacks: {
+              title: function(tooltipItems) {
+                return `${tooltipItems[0].label} Years Old`; // Use the label of the first item
+            },
+              label: function(tooltipItem) {
+                  return currencyFormatter.format(tooltipItem.raw * 1000);
+              }
+          }
+        },
+       },
       scales: {
         x: {
           title: {
@@ -361,6 +392,11 @@ function updateDistributionChart(data) {
     window.distributionChart.destroy();
   }
 
+  // Create a linear gradient
+  const gradient = ctx.createLinearGradient(0, 0, 0, 400); // Adjust the coordinates as needed
+  gradient.addColorStop(0, 'rgba(58, 211, 99, 0.4)'); // Start color
+  gradient.addColorStop(1, 'rgba(58, 211, 99, 0.03)'); // End color
+
   window.distributionChart = new Chart(ctx, {
     type: "line",
     data: {
@@ -369,13 +405,38 @@ function updateDistributionChart(data) {
         {
           label: "Remaining Savings",
           data: savings,
-          borderColor: "blue",
-          fill: false,
+          borderColor: "#43a32c",
+          borderWidth: 2,
+          fill: true,
+          backgroundColor: gradient, // Fill color (with transparency)
+          pointBackgroundColor:'#43a32c', // Color of the data points
+          pointRadius: 4, // Size of the points
+          
         },
       ],
     },
     options: {
       responsive: true,
+      plugins: {
+        tooltip: {
+            backgroundColor: 'rgba(240, 240, 240, 1.0)', // Background color
+            titleColor: '#000', // Title text color
+            bodyColor: '#000', // Body text color
+            borderColor: 'rgba(255, 255, 255, 0.5)', // Border color
+            borderWidth: 1, // Border width
+            padding: 20, // Padding inside the tooltip
+            cornerRadius: 5, // Rounded corners
+            displayColors: false, // Hide color boxes
+            callbacks: {
+              title: function(tooltipItems) {
+                return `${tooltipItems[0].label} Years Old`; // Use the label of the first item
+            },
+              label: function(tooltipItem) {
+                  return currencyFormatter.format(tooltipItem.raw * 1000);
+              }
+          }
+        },
+       },
       scales: {
         x: {
           title: {
