@@ -68,20 +68,6 @@ function openTab(evt, tabName) {
   }
 }
 
-// This is for calculating social security payout
-function calculateAverageMonthlyIncomeOverLife(data) {
-
-    if (data.length === 0) {
-        return 0; // Check if the array is empty
-    }
-
-    // Use reduce to sum up all income values
-    const totalIncome = data.reduce((sum, entry) => sum + entry.income, 0);
-
-    // Calculate and return the average
-    const yearlyAverageIncom = totalIncome / data.length;
-    return yearlyAverageIncom / 12;
-}
 
 function calculateAccumulationPhase() {
   const inputs = getAccumulationInputValues();
@@ -140,18 +126,25 @@ function calculateDistributionPhase() {
   const inputs = getDistributionInputValues();
   const distributionData = [];
 
-  // calculate starting social security amount. fill
-  // in the DOM element and provide a bit of info about this
-  const aime = calculateAverageMonthlyIncomeOverLife(accumulationData); // Average Indexed Monthly Earnings
-  const fra = 67; // Full Retirement Age
-  const retirementAge = getAccumulationInputValues().retirementAge
-  socialSecurityStartingMonthlyBenefit = estimateSocialSecurityBenefit(aime, fra, retirementAge);
-  document.getElementById("monthlySocialSecurity").value = currencyFormatter.format(socialSecurityStartingMonthlyBenefit)
 
+  // calculate all the social security stuff
+  var ssCalculator = new SocialSecurityCalculator();
+  var earningsHistory = accumulationData.map((year) => year.income);
+  //var aime2 = ssCalculator.calculateAIME(earningsHistory);  // Average Indexed Monthly Earnings
+
+
+  const accumulation_inputs = getAccumulationInputValues();
+  var birthYear = new Date().getFullYear() - accumulation_inputs.currentAge;
+  var fullRetirement_Year = ssCalculator.getFullRetirementAge(birthYear);
+
+  socialSecurityStartingMonthlyBenefit = ssCalculator.calculateRetirementBenefits(birthYear, inputs.retirementAge , earningsHistory);
+  document.getElementById("monthlySocialSecurity").value = currencyFormatter.format(socialSecurityStartingMonthlyBenefit)
+  
 
   let currentValues = {
     savings: inputs.retirementSavings,
     age: inputs.retirementAge,
+    fullRetirementYear: fullRetirement_Year,
     currentYear:
       new Date().getFullYear() +
       (inputs.retirementAge - getAccumulationInputValues().currentAge),
@@ -169,6 +162,7 @@ function calculateDistributionPhase() {
       savings: yearData.remainingSavings,
       age: age + 1,
       currentYear: yearData.year + 1,
+      fullRetirementYear: fullRetirement_Year
     };
 
     if (yearData.remainingSavings <= 0) {
@@ -176,6 +170,8 @@ function calculateDistributionPhase() {
       break;
     }
   }
+
+
 
   // update the DOM element with the final value from the distrubution data with our final savings retirementLastDistribution ID
   document.getElementById("retirementLastDistribution").innerHTML = Math.round(distributionData[distributionData.length - 1].remainingSavings).toLocaleString("en-US");
@@ -270,16 +266,23 @@ function calculateAccumulationYearlyData(age, inputs, currentValues, taxFilingSt
 }
 
 function calculateDistributionYearlyData(age, inputs, currentValues) {
-  const { otherIncome, postReturnRate, inflationRate } =
-    inputs;
-  
-  const { savings, currentYear } = currentValues;
+  const { otherIncome, postReturnRate, inflationRate } =  inputs;
+  const { savings, currentYear, fullRetirementYear } = currentValues;
+
+
+  let annualSocialSecurity = socialSecurityStartingMonthlyBenefit * 12 *
+      Math.pow(1 + inflationRate, age - inputs.retirementAge);
+
+
+  if (age < fullRetirementYear) {
+    annualSocialSecurity = 0;
+  }
+
   
   const annualExpenses =  projectedMonthlyExpensesAtRetirement * 12 *
      Math.pow(1 + inflationRate, age - inputs.retirementAge);
 
-  const annualSocialSecurity = socialSecurityStartingMonthlyBenefit * 12 *
-      Math.pow(1 + inflationRate, age - inputs.retirementAge);
+
   
   const annualOtherIncome = otherIncome * 12 * 
       Math.pow(1 + inflationRate, age - inputs.retirementAge);
