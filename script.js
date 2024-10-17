@@ -490,7 +490,12 @@ function updatePreretirementTaxTable(data) {
         <td>${ currencyFormatter.format(row.taxedIncome.totalTax)   }</td>
         <td>${ row.taxedIncome.effectiveRatePercentage }</td>
         <td>${ row.taxedIncome.marginalRatePercentage }</td>
-        <td>${taxBracketBreakdown}</td>
+        <td>        
+            <span class="tooltip-container">
+                  <span class="tooltip-icon"> i </span>
+                  <span class="tooltip-text">${taxBracketBreakdown}</span>
+            </span>        
+        </td>
       `;
       tbody.appendChild(tr);
   });
@@ -513,6 +518,7 @@ function updateAccumulationTable(data) {
       `;
     tbody.appendChild(tr);
   });
+
 }
 
 function updateDistributionTable(data) {
