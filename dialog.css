@@ -1,24 +1,31 @@
-.dialog-overlay {
+/* Main dialog container */
+#mainDialog {
     display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
+    right: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgb(0 0 0 / 52%);
+    overflow: auto;
 }
 
-.dialog {
+/* Dialog content */
+.dialog-contents {
     background-color: #fefefe;
     margin: 5% auto;
     padding: 30px;
     border: 1px solid #888;
     max-width: 625px;
+    width: 90%; /* Responsive width */
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative; /* For absolute positioning of close button */
 }
 
+/* Dialog header */
 .dialog-header {
     display: flex;
     justify-content: space-between;
@@ -26,37 +33,68 @@
     margin-bottom: 15px;
 }
 
+/* Dialog title */
 .dialog-title {
     margin: 0;
     font-size: 1.75rem;
-    color: #a7a7a7;
+    color: #333; /* Darker color for better readability */
     background: none;
 }
 
-.close-button {
+/* Close button */
+#closeDialog {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     color: #aaa;
-    float: right;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    transform: rotateZ(317deg);
 }
 
-.close-button:hover,
-.close-button:focus {
+#closeDialog:hover,
+#closeDialog:focus {
     color: #000;
+    text-decoration: none;
+}
+
+/* Dialog content */
+.dialog-content {
+    color: #666;
+    max-height: 60vh; /* Increased max-height for better visibility */
+    overflow-y: auto;
+    padding-right: 10px; /* Add some padding for scrollbar */
+}
+
+/* Scrollbar styling for webkit browsers */
+.dialog-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dialog-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.dialog-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.dialog-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Open dialog link */
+[data-open-dialog] {
+    color: #3498db;
     text-decoration: none;
     cursor: pointer;
 }
 
-.dialog-content {
-    color: #666;
-    max-height: 53vh;
-    overflow: auto;
-}
-
-.open-dialog-link {
-    color: #3498db;
-}
-.open-dialog-link:hover {
-    text-decoration: none;
+[data-open-dialog]:hover {
+    text-decoration: underline;
 }

@@ -17,7 +17,6 @@
     <link rel="stylesheet"  href="tooltip.css" />
     <link rel="stylesheet"  href="dialog.css" />
 
-
 </head>
 <body>
     <div class="container">
@@ -27,65 +26,12 @@
                 <h1 style="margin: 0">Life Purpose Calculator</h1>
                 <!-- instructions go here with to be seen with a dialog -->
                 <p style="margin-top: 0">
-                    Learn more about the <a href="#" class="open-dialog-link" id="openDialog">philosophy of retirement and money</a>.
+                    Learn more about the <a href="#" data-open-dialog="overview" >philosophy of retirement and money</a>. Second dialog link: 
+                    <a href="#" data-open-dialog="taxesPreretirement">Open Pre-retirement Taxes</a>
                 </p>
             </span>
 
-
         </div>
-
-      
-
-        <div id="dialogOverlay" class="dialog-overlay">
-            <div class="dialog">
-                <div class="dialog-header">
-                    <h2 class="dialog-title">Building Wealth vs. Living in the Moment</h2>
-                    <span class="close-button" id="closeDialog">&times;</span>
-                </div>
-                <div class="dialog-content">
-
-                    <div class="retirement-perspectives">
-                      
-                        <p>This retirement calculator is broken apart into two distinct sections. Most calculators have everything in one graph, but this is not the best approach. There are two very different mindsets you need to think about with each one. Combining each mindset into one graph loses the essense with what retirement is.</p>
-                      
-                        <section class="perspective">
-                          <h2>Accumulation - Creating Wealth and Freedom</h2>
-                          <p>This approach emphasizes long-term financial growth and security.</p>
-                      
-                           <ul>
-                            <li>Prioritize saving and investing early in life</li>
-                            <li>Maximize contributions to retirement accounts (401(k)s, IRAs)</li>
-                            <li>Invest in a diversified portfolio for potential higher returns</li>
-                            <li>Delay gratification now for potentially greater financial freedom later</li>
-                            <li>Aim for a large nest egg to support a comfortable retirement lifestyle</li>
-                          </ul>      
-                        </section>
-                      
-                        <section class="perspective">
-                          <h2>Distribution - Enjoying Life Now</h2>
-                          <p>You have worked hard fulfilling someone else's business or dream. Now is time to do what you want. Think hard about spending money to help fulfill your dreams and aspirations.</p>
-                      
-                          <ul>
-                            <li>Accelerate your dreams by leveraging your accumulated wealth</li>
-                            <li>Invest in experiences that you've always wanted but couldn't afford before</li>
-                            <li>Use your financial power to create lasting memories and impacts</li>
-                            <li>Explore new passions or hobbies without financial constraints</li>
-                            <li>Consider how your wealth can open doors to new opportunities and adventures</li>
-                            <li>Balance enjoying your wealth now with ensuring long-term financial stability</li>
-                            <li>Use your resources to make meaningful changes in your life and others'</li>
-                          </ul>
-                                                 
-                        </section>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!-- end dialog with instructions -->
-
-
-
 
 
         <div id="accumulation" class="tab-content active">
@@ -401,9 +347,80 @@
         </div>
     </div>
 
+
+
+
     <a id="github-link" href="https://github.com/scottpetrovic/life-purpose-calculator" target="_blank">
         <img src="./img/github-logo.png" width="80px" />
     </a>
+
+
+    <div id="mainDialog" class="dialog">
+        <div class="dialog-contents">
+            <div class="dialog-content"></div>
+            <button id="closeDialog">+</button>    
+        </div>
+  
+    </div>
+
+    <!-- dialog content -->
+    <template id="overviewTemplate">
+        <h2 class="dialog-title">Building Wealth vs. Living in the Moment</h2>
+        <div class="retirement-perspectives">
+                  
+            <p>This retirement calculator is broken apart into two distinct sections. Most calculators have everything in one graph, but this is not the best approach. There are two very different mindsets you need to think about with each one. Combining each mindset into one graph loses the essense with what retirement is.</p>
+          
+            <section class="perspective">
+              <h2>Accumulation - Creating Wealth and Freedom</h2>
+              <p>This approach emphasizes long-term financial growth and security.</p>
+          
+               <ul>
+                <li>Prioritize saving and investing early in life</li>
+                <li>Maximize contributions to retirement accounts (401(k)s, IRAs)</li>
+                <li>Invest in a diversified portfolio for potential higher returns</li>
+                <li>Delay gratification now for potentially greater financial freedom later</li>
+                <li>Aim for a large nest egg to support a comfortable retirement lifestyle</li>
+              </ul>      
+            </section>
+          
+            <section class="perspective">
+              <h2>Distribution - Enjoying Life Now</h2>
+              <p>You have worked hard fulfilling someone else's business or dream. Now is time to do what you want. Think hard about spending money to help fulfill your dreams and aspirations.</p>
+          
+              <ul>
+                <li>Accelerate your dreams by leveraging your accumulated wealth</li>
+                <li>Invest in experiences that you've always wanted but couldn't afford before</li>
+                <li>Use your financial power to create lasting memories and impacts</li>
+                <li>Explore new passions or hobbies without financial constraints</li>
+                <li>Consider how your wealth can open doors to new opportunities and adventures</li>
+                <li>Balance enjoying your wealth now with ensuring long-term financial stability</li>
+                <li>Use your resources to make meaningful changes in your life and others'</li>
+              </ul>
+                                     
+            </section>
+
+        </div>
+    </template>
+
+
+    <template id="taxesPreretirementTemplate">
+        <h2>Pre-retirement Taxes</h2>
+        <p>This is the detailed pre-retirement taxes content.</p>
+        <table>
+            <tr>
+                <th>Tax Type</th>
+                <th>Rate</th>
+            </tr>
+            <tr>
+                <td>Income Tax</td>
+                <td>Varies</td>
+            </tr>
+            <!-- Add more rows -->
+        </table>
+        <!-- Add more complex HTML here -->
+    </template>
+
+
 
 
     <script src="TaxCalculator.js"></script> <!-- logic to help determine taxes -->

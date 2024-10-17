@@ -109,6 +109,8 @@ function calculateAccumulationPhase() {
     };
   }
 
+  console.log(accumulationData.map( x => x.taxedIncome))
+
   // calculate the estimated living expenses when the person retires
   const yearsUntilRetirement = inputs.retirementAge - inputs.currentAge;
 
@@ -539,12 +541,6 @@ function addCalculatorEventListeners() {
       calculateDistributionPhase();
     });
 
-  // Trigger distribution phase calculation when switching to the distribution tab
-  document
-    .querySelector(".tab[onclick=\"openTab(event, 'distribution')\"]")
-    .addEventListener("click", function () {
-      calculateDistributionPhase();
-    });
 }
 
 function createAccordionUIElements() {
