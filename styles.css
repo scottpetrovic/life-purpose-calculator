@@ -103,6 +103,12 @@ input[type="number"] {
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+select {
+  padding: 0.5rem;
+  border: none;
+  background: #f3f3f3;
+}
+
 button.tab {
     background: #e6f9f4;
 }

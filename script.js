@@ -93,11 +93,15 @@ function calculateAccumulationPhase() {
     currentYear: new Date().getFullYear(),
   };
 
+  // get filing status which affects how taxes are calculated
+  const filingStatusSelect = document.getElementById('filing-status-input');
+
   for (let age = inputs.currentAge; age <= inputs.retirementAge; age++) {
     const yearData = calculateAccumulationYearlyData(
       age,
       inputs,
-      currentValues
+      currentValues,
+      filingStatusSelect.value
     );
     accumulationData.push(yearData);
 
@@ -238,7 +242,7 @@ function getDistributionInputValues() {
   };
 }
 
-function calculateAccumulationYearlyData(age, inputs, currentValues) {
+function calculateAccumulationYearlyData(age, inputs, currentValues, taxFilingStatus) {
   const { preReturnRate, inflationRate, incomeIncrease } = inputs;
   const { savings, income, contributions, currentYear } = currentValues;
 
@@ -248,8 +252,10 @@ function calculateAccumulationYearlyData(age, inputs, currentValues) {
   const newIncome = income * (1 + incomeIncrease);
   const newContributions = contributions ; // flat contributions
 
+
+  // options are: single, marriedJointly, marriedSeparately, headOfHousehold
   const tax_calculator = new TaxCalculator();
-  const taxInformationForYear = tax_calculator.calculateEffectiveTaxRate(newIncome, currentYear);
+  const taxInformationForYear = tax_calculator.calculateEffectiveTaxRate(newIncome, currentYear, taxFilingStatus);
 
   return {
     year: currentYear,
@@ -467,6 +473,14 @@ function decimalToPercentage(decimal) {
   return percentage.toFixed(1) + '%';
 }
 
+const formatTaxBracket = (bracket, nextBracket) => {
+  const rate = decimalToPercentage(bracket.rate);
+  const minAmount = currencyFormatter.format(bracket.min);
+  const maxAmount = nextBracket ? currencyFormatter.format(nextBracket.min - 0.01) : "and above";
+  
+  return ` ${rate} : ${minAmount} to ${maxAmount}`;
+};
+
 function updatePreretirementTaxTable(data) {
 
   const template = document.getElementById("taxesPreretirementTemplate");
@@ -478,7 +492,11 @@ function updatePreretirementTaxTable(data) {
 
     // format/show estimated tax bracket breakdown
     const taxBracketBreakdown = row.taxedIncome.brackets
-      .map( x => `${decimalToPercentage(x.rate)} ${  currencyFormatter.format(x.min) }` ).join("<br>")
+    .map((bracket, index, array) => {
+      const nextBracket = array[index + 1];
+      return formatTaxBracket(bracket, nextBracket);
+    })
+    .join("<br>");
 
 
   const tr = document.createElement("tr");
@@ -511,7 +529,9 @@ function updateAccumulationTable(data) {
     tr.innerHTML = `
           <td>${row.year}</td>
           <td>${row.age}</td>
-          <td>${currencyFormatter.format(row.income)}</td>
+          <td>${currencyFormatter.format(row.income)} 
+             <span class="small-notes">(${row.taxedIncome.effectiveRatePercentage} effective tax)</span>
+          </td>
           <td>${currencyFormatter.format(row.contributions)}</td>
           <td>${currencyFormatter.format(row.investmentIncome)}</td>
           <td>${currencyFormatter.format(row.endAmount)}</td>
@@ -577,6 +597,10 @@ function addCalculatorEventListeners() {
       e.preventDefault();
       calculateDistributionPhase();
     });
+
+    document.getElementById('filing-status-input').addEventListener('change', function() {
+      calculateAccumulationPhase()
+  });
 
 }
 

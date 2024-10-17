@@ -2,11 +2,11 @@
     position: relative;
     display: inline-block;
     background: #c7eaff;
-    padding: 0 0.5rem;
-    padding-left: 0.1rem;
-    border-radius: 25px;
+    padding: 0;
     padding-top: 2px;
+    border-radius: 25px;
     width: 1rem;
+    float: right;
   }
 
   .tooltip-icon {
@@ -19,7 +19,7 @@
   .tooltip-text {
     visibility: hidden;
     font-weight: normal;
-    width: 250px;
+    width: 200px;
     display: inline-block;
     background-color: #d5eaff;
     color: #444444;
@@ -29,8 +29,6 @@
     box-shadow: 3px 3px 3px grey;
     z-index: 1;
     right: 0;
-    /* bottom: 125%; */
-    /* left: -150px; */
     opacity: 0;
     transition: opacity 0.3s;
     line-height: 110%;

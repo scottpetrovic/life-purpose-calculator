@@ -60,8 +60,29 @@
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="annualIncome" value="60000" required>
-                        </span>                       
+                        </span>
+
+                        
                     </div>
+
+                    <div class="parameter-input-container">
+                        <label for="filing-status-input">
+                            How do you file your taxes
+
+                          <span class="tooltip-container">
+                                <span class="tooltip-icon"> i </span>
+                                <span class="tooltip-text">Head of household - This could happen when unmarried people are living together, or if you are supporting children without being married.</span>
+                          </span>   
+
+                        </label>
+                        <select name="filing-status-input" id="filing-status-input">
+                            <option value="single">Single</option>
+                            <option value="marriedJointly">Married Jointly</option>
+                            <option value="marriedSeparately">Married Separate</option>
+                            <option value="headOfHousehold">Head of Household</option>
+                          </select>
+                    </div>
+
                     <div class="parameter-input-container">
                         <label for="currentSavings">Current Retirement Savings</label>
                         <span>
