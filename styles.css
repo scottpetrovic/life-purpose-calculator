@@ -188,6 +188,7 @@ th {
   text-align: center;
   background: #7dc2ff;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 .main-section-callout h3 {
   color: white;
@@ -205,7 +206,7 @@ th {
   color: white;
 }
 
-button.calculate-button {
+button.calculate-button, button.primary {
   background: linear-gradient(180deg, rgba(238, 255, 238, 1) 0%, rgba(184, 250, 184, 1) 100%);
   padding: 1rem 2rem;
   color: #16352b;
@@ -217,11 +218,14 @@ button.calculate-button {
   display: flex;
   justify-content: center;
   column-gap: 7px;
+  width: 100%;
 }
-button.calculate-button:hover {
+button.calculate-button:hover, button.primary:hover {
   background: rgb(238,255,238);
   background: linear-gradient(0deg, rgba(238,255,238,1) 0%, rgba(184,250,184,1) 100%);
 }
+
+
 
 
 /* accordion styles */

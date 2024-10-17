@@ -31,10 +31,7 @@
                 </p>
             </span>
 
-            <div class="tabs">
-                <button class="tab active" onclick="openTab(event, 'accumulation')">Accumulation Phase</button>
-                <button class="tab" onclick="openTab(event, 'distribution')">Distribution Phase</button>
-            </div>
+
         </div>
 
       
@@ -216,6 +213,8 @@
                     <p class="large-callout-amount"><span style="margin-right: 0.5rem; opacity: 0.5">$</span><span id="retirementLastAccumulation">234,000</span></p>
                 </div>
 
+                <button class="primary" onclick="openTab(event, 'distribution')">Continue to retirement &raquo;</button>
+
                 <h2>What does this mean?</h2>
 
 
@@ -349,6 +348,8 @@
                     <h3 id="ran-out-of-money-message"></h3> <!-- javascript populates this if you run out early-->
                     <p id="distribution-final-amount" class="large-callout-amount"><span style="margin-right: 0.5rem; opacity: 0.5">$</span><span id="retirementLastDistribution">0</span></p>
                 </div>
+
+                <button class="primary" onclick="openTab(event, 'accumulation')">&laquo; Back to accumulation</button>
 
                 <h2>Budgeting or Dreaming</h2>
 
