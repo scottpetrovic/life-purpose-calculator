@@ -50,36 +50,39 @@ class TaxCalculator {
     calculateEffectiveTaxRate(income, year) {
         const currentYear = new Date().getFullYear();
         year = year || currentYear;
-
+    
         let brackets;
         if (this.taxBracketsByYear[year]) {
             brackets = this.taxBracketsByYear[year];
         } else {
             brackets = this.extrapolateTaxBrackets(year);
         }
-
+    
+        // Explicitly sort brackets from lowest to highest
+        brackets = brackets.sort((a, b) => a.min - b.min);
+    
         let totalTax = 0;
         let remainingIncome = income;
         let marginalTaxRate = 0;
-
-        for (let i = 0; i < brackets.length - 1; i++) {
+    
+        for (let i = 0; i < brackets.length; i++) {
             const currentBracket = brackets[i];
             const nextBracket = brackets[i + 1];
             
             if (income > currentBracket.min) {
-                const taxableInThisBracket = Math.min(remainingIncome, currentBracket.min - nextBracket.min);
-                totalTax += taxableInThisBracket * currentBracket.rate;
+                const taxableInThisBracket = nextBracket 
+                    ? Math.min(remainingIncome, nextBracket.min - currentBracket.min)
+                    : remainingIncome;
+                
+                const taxForBracket = taxableInThisBracket * currentBracket.rate;
+                totalTax += taxForBracket;
                 remainingIncome -= taxableInThisBracket;
                 marginalTaxRate = currentBracket.rate;
             }
         }
-
-        if (remainingIncome > 0) {
-            totalTax += remainingIncome * brackets[brackets.length - 1].rate;
-        }
-
+    
         const effectiveRate = totalTax / income;
-
+    
         return {
             year: year,
             brackets: brackets,

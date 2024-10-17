@@ -506,10 +506,7 @@ function updateAccumulationTable(data) {
     tr.innerHTML = `
           <td>${row.year}</td>
           <td>${row.age}</td>
-          <td>
-            ${currencyFormatter.format(row.income)}  
-            <span class="small-notes">(${row.taxedIncome.effectiveRatePercentage} effective tax)</span>
-          </td>
+          <td>${currencyFormatter.format(row.income)}</td>
           <td>${currencyFormatter.format(row.contributions)}</td>
           <td>${currencyFormatter.format(row.investmentIncome)}</td>
           <td>${currencyFormatter.format(row.endAmount)}</td>
