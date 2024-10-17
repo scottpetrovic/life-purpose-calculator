@@ -109,8 +109,6 @@ function calculateAccumulationPhase() {
     };
   }
 
-  console.log(accumulationData.map( x => x.taxedIncome))
-
   // calculate the estimated living expenses when the person retires
   const yearsUntilRetirement = inputs.retirementAge - inputs.currentAge;
 
@@ -125,6 +123,7 @@ function calculateAccumulationPhase() {
 
   updateAccumulationChart(accumulationData);
   updateAccumulationTable(accumulationData);
+  updatePreretirementTaxTable(accumulationData)
 
   // put the final amount that we saved for retirement in a couple areas
   document.getElementById("retirementSavings").value = Math.round(
@@ -461,6 +460,40 @@ function updateDistributionChart(data) {
       },
     },
   });
+}
+
+function decimalToPercentage(decimal) {
+  const percentage = decimal * 100;
+  return percentage.toFixed(1) + '%';
+}
+
+function updatePreretirementTaxTable(data) {
+
+  const template = document.getElementById("taxesPreretirementTemplate");
+  const content = template.content 
+  const tbody = content.querySelector('tbody');
+  tbody.innerHTML = "";
+
+  data.forEach((row) => {
+
+    // format/show estimated tax bracket breakdown
+    const taxBracketBreakdown = row.taxedIncome.brackets
+      .map( x => `${decimalToPercentage(x.rate)} ${  currencyFormatter.format(x.min) }` ).join("<br>")
+
+
+  const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.year}</td>
+        <td>${row.age}</td>
+        <td>${currencyFormatter.format(row.income) }</td> <!-- pretax income -->
+        <td>${ currencyFormatter.format(row.taxedIncome.incomeAfterTax)   }</td>
+        <td>${ currencyFormatter.format(row.taxedIncome.totalTax)   }</td>
+        <td>${ row.taxedIncome.effectiveRatePercentage }</td>
+        <td>${taxBracketBreakdown}</td>
+      `;
+      tbody.appendChild(tr);
+  });
+
 }
 
 function updateAccumulationTable(data) {

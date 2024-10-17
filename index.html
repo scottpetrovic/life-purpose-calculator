@@ -406,18 +406,20 @@
     <template id="taxesPreretirementTemplate">
         <h2>Pre-retirement Taxes</h2>
         <p>This is the detailed pre-retirement taxes content.</p>
-        <table>
-            <tr>
-                <th>Tax Type</th>
-                <th>Rate</th>
-            </tr>
-            <tr>
-                <td>Income Tax</td>
-                <td>Varies</td>
-            </tr>
-            <!-- Add more rows -->
+        <table id="preretirementTaxTable">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Age</th>
+                    <th>Pre-tax Income</th>
+                    <th>Post-tax Income</th>
+                    <th>Tax Amount</th>
+                    <th>Effective Tax Rate</th>
+                    <th>Tax Bracket breakdown</th>
+                  </tr>
+            </thead>
+            <tbody></tbody>
         </table>
-        <!-- Add more complex HTML here -->
     </template>
 
 
@@ -429,3 +431,4 @@
 
 </body>
 </html>
+
