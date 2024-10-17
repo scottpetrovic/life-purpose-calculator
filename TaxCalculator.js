@@ -60,6 +60,7 @@ class TaxCalculator {
 
         let totalTax = 0;
         let remainingIncome = income;
+        let marginalTaxRate = 0;
 
         for (let i = 0; i < brackets.length - 1; i++) {
             const currentBracket = brackets[i];
@@ -69,6 +70,7 @@ class TaxCalculator {
                 const taxableInThisBracket = Math.min(remainingIncome, currentBracket.min - nextBracket.min);
                 totalTax += taxableInThisBracket * currentBracket.rate;
                 remainingIncome -= taxableInThisBracket;
+                marginalTaxRate = currentBracket.rate;
             }
         }
 
@@ -83,6 +85,8 @@ class TaxCalculator {
             brackets: brackets,
             effectiveRate: effectiveRate,
             effectiveRatePercentage: (effectiveRate * 100).toFixed(2) + '%',
+            marginalRate: marginalTaxRate,
+            marginalRatePercentage: (marginalTaxRate * 100).toFixed(2) + '%',
             totalTax: totalTax,
             incomeAfterTax: income - totalTax
         };

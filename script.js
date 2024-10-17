@@ -489,6 +489,7 @@ function updatePreretirementTaxTable(data) {
         <td>${ currencyFormatter.format(row.taxedIncome.incomeAfterTax)   }</td>
         <td>${ currencyFormatter.format(row.taxedIncome.totalTax)   }</td>
         <td>${ row.taxedIncome.effectiveRatePercentage }</td>
+        <td>${ row.taxedIncome.marginalRatePercentage }</td>
         <td>${taxBracketBreakdown}</td>
       `;
       tbody.appendChild(tr);
