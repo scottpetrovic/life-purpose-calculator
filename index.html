@@ -26,8 +26,8 @@
                 <h1 style="margin: 0">Life Purpose Calculator</h1>
                 <!-- instructions go here with to be seen with a dialog -->
                 <p style="margin-top: 0">
-                    Learn more about the <a href="#" data-open-dialog="overview" >philosophy of retirement and money</a>. Second dialog link: 
-                    <a href="#" data-open-dialog="taxesPreretirement">Open Pre-retirement Taxes</a>
+                    Learn more about the <a href="#" data-open-dialog="overview" >philosophy of retirement and money</a>. 
+                    
                 </p>
             </span>
 
@@ -56,12 +56,13 @@
                                 <span class="tooltip-text">Doesn't affect retirement calculations . Uses effective tax rate in table as opposed to marginal tax rate. </span>
                             </span>
                             
-                        </label>
+                       </label>
                         <span>
                             <span class="dollar-sign">$</span>
                             <input type="text" id="annualIncome" value="60000" required>
                         </span>
 
+                        <a href="#" data-open-dialog="taxesPreretirement">See estimated tax table</a>
                         
                     </div>
 
@@ -426,7 +427,7 @@
 
     <template id="taxesPreretirementTemplate">
         <h2>Pre-retirement Taxes</h2>
-        <p>This is the detailed pre-retirement taxes content.</p>
+        <p>See expected taxes and increases based on inflation. Tax bracket values are estimates based on current inflation</p>
         <table id="preretirementTaxTable">
             <thead>
                 <tr>

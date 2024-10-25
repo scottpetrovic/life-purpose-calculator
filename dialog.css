@@ -87,14 +87,3 @@
 .dialog-content::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
-
-/* Open dialog link */
-[data-open-dialog] {
-    color: #3498db;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-[data-open-dialog]:hover {
-    text-decoration: underline;
-}
