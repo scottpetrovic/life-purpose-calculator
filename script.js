@@ -113,7 +113,8 @@ function calculateAccumulationPhase() {
 
   updateAccumulationChart(accumulationData);
   updateAccumulationTable(accumulationData);
-  updatePreretirementTaxTable(accumulationData)
+  updatePreretirementTaxTable(accumulationData);
+  updateCostOfLivingTaxTable(accumulationData);
 
   // put the final amount that we saved for retirement in a couple areas
   document.getElementById("retirementSavings").value = Math.round(
@@ -239,7 +240,7 @@ function getDistributionInputValues() {
 }
 
 function calculateAccumulationYearlyData(age, inputs, currentValues, taxFilingStatus) {
-  const { preReturnRate, inflationRate, incomeIncrease } = inputs;
+  const { preReturnRate, inflationRate, incomeIncrease, currentMonthlyExpenses, currentAge } = inputs;
   const { savings, income, contributions, currentYear } = currentValues;
 
   const startAmount = savings;
@@ -253,11 +254,17 @@ function calculateAccumulationYearlyData(age, inputs, currentValues, taxFilingSt
   const tax_calculator = new TaxCalculator();
   const taxInformationForYear = tax_calculator.calculateEffectiveTaxRate(newIncome, currentYear, taxFilingStatus);
 
+  // calculate data needed for living expenses
+  let annualExpenses = currentMonthlyExpenses * 12;
+  annualExpenses *= Math.pow(1 + inflationRate, age - currentAge);
+  const compoundMultiplier = Math.pow(1 + inflationRate, age - currentAge)
+
   return {
     year: currentYear,
     age: age,
     income: newIncome,
     taxedIncome: taxInformationForYear,
+    livingExpenses: { annualExpenses, compoundMultiplier },
     contributions: newContributions,
     investmentIncome: investmentIncome,
     startAmount: startAmount,
@@ -347,6 +354,9 @@ function updateAccumulationChart(data) {
     options: {
       responsive: true,
       plugins: {
+        legend: {
+          display: false, // Hide the legend
+        },
         tooltip: {
             backgroundColor: 'rgba(240, 240, 240, 1.0)', // Background color
             titleColor: '#000', // Title text color
@@ -428,6 +438,9 @@ function updateDistributionChart(data) {
     options: {
       responsive: true,
       plugins: {
+        legend: {
+          display: false, // Hide the legend
+        },
         tooltip: {
             backgroundColor: 'rgba(240, 240, 240, 1.0)', // Background color
             titleColor: '#000', // Title text color
@@ -522,6 +535,49 @@ function updatePreretirementTaxTable(data) {
   });
 
 }
+
+
+function updateCostOfLivingTaxTable(data) {
+
+  const template = document.getElementById("livingCostsTemplate");
+  const content = template.content 
+  const tbody = content.querySelector('tbody');
+  tbody.innerHTML = "";
+
+  console.log(data)
+
+  data.forEach((row) => {
+
+
+    // format/show estimated tax bracket breakdown
+    const taxBracketBreakdown = row.taxedIncome.brackets
+    .map((bracket, index, array) => {
+      const nextBracket = array[index + 1];
+      return formatTaxBracket(bracket, nextBracket);
+    })
+    .join("<br>");
+
+    // https://fred.stlouisfed.org/series/APU0000708111
+    let average_cost_of_eggs_2024 = 3.81; 
+    
+    // https://www.empower.com/the-currency/life/gas-prices-by-state#:~:text=In%20June%202023%2C%20the%20national,Premium%3A%20%244.331
+    let average_cost_of_gas_2023 = 3.583;
+    
+    
+  const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.year}</td>
+        <td>${row.age}</td>   
+        <td>${currencyFormatter.format(row.livingExpenses.annualExpenses/12)}</td>
+        <td>${currencyFormatter.format(row.livingExpenses.annualExpenses)}</td>
+        <td>$${ (row.livingExpenses.compoundMultiplier * average_cost_of_eggs_2024).toFixed(2)  }/dozen</td>   
+        <td>$${ (row.livingExpenses.compoundMultiplier * average_cost_of_gas_2023).toFixed(2)  }/gallon</td>   
+      `;
+      tbody.appendChild(tr);
+  });
+
+}
+
 
 function updateAccumulationTable(data) {
   const tbody = document.querySelector("#accumulationTable tbody");

@@ -72,7 +72,7 @@
 
                           <span class="tooltip-container">
                                 <span class="tooltip-icon"> i </span>
-                                <span class="tooltip-text">Head of household - This could happen when unmarried people are living together, or if you are supporting children without being married.</span>
+                                <span class="tooltip-text">This affects your effective tax rate. Head of household - This could happen when unmarried people are living together, or if you are supporting children without being married.</span>
                           </span>   
 
                         </label>
@@ -114,6 +114,9 @@
                             <input type="text" id="currentMonthlyExpenses" value="2000" required>
                         </span>
                         <span id="monthlyExpensesAtRetirement" class="small-notes"></span>
+
+                        <a href="#" data-open-dialog="livingCosts">See expenses breakdown</a>
+
                     </div>
 
                     <div class="parameter-input-container">
@@ -142,6 +145,9 @@
                 
                 <div id="accumulationResults">
                     <canvas id="accumulationChart"></canvas>
+
+                    <h2>Pre-retirement years</h2>
+
                     <table id="accumulationTable">
                         <thead>
                             <tr>
@@ -181,14 +187,16 @@
                     <p class="large-callout-amount"><span style="margin-right: 0.5rem; opacity: 0.5">$</span><span id="retirementLastAccumulation">234,000</span></p>
                 </div>
 
-                <button class="primary" onclick="openTab(event, 'distribution')">Continue to retirement &raquo;</button>
+                <button class="primary" onclick="openTab(event, 'distribution')">Continue to retirement 
+                    <img src="./img/back-icon.svg" width="20px" height="20px" style="transform: rotateZ(180deg);" />
+                </button>
 
                 <h2>What does this mean?</h2>
 
 
                 <div class="accordion">
                     <button class="accordion-header">I don't think I have enough</button>
-                    <div class="accordion-content">   
+                    <div class="accordion-content">
                         <ul>
                             <li>Start small: Remember, even minor savings can compound over time. Begin with what you can manage consistently.</li>
                             <li>Automate your savings: Set up automatic transfers to your savings account, no matter how small the amount.</li>
@@ -277,6 +285,8 @@
             <div class="results-section">
                 <div id="distributionResults">
                     <canvas id="distributionChart"></canvas>
+
+                    <h2>Retirement years</h2>
                     <table id="distributionTable">
                         <thead>
                             <tr>
@@ -317,7 +327,9 @@
                     <p id="distribution-final-amount" class="large-callout-amount"><span style="margin-right: 0.5rem; opacity: 0.5">$</span><span id="retirementLastDistribution">0</span></p>
                 </div>
 
-                <button class="primary" onclick="openTab(event, 'accumulation')">&laquo; Back to accumulation</button>
+                <button class="primary" onclick="openTab(event, 'accumulation')">
+                    <img src="./img/back-icon.svg" width="20px" height="20px" />
+                    Back to pre-retirement</button>
 
                 <h2>Budgeting or Dreaming</h2>
 
@@ -445,6 +457,24 @@
         </table>
     </template>
 
+
+    <template id="livingCostsTemplate">
+        <h2>Living costs table</h2>
+        <p> Estimated costs are based off the inflation rate you provided. The expectatin is that you will be living with the same lifestyle as you currently are.</p>
+        <table id="livingCostsTaxTable">
+            <thead>
+                <tr>
+                    <th>Year</th>
+                    <th>Age</th>
+                    <th>Monthly expenses</th>
+                    <th>Yearly expenses</th>
+                    <th>Eggs</th>
+                    <th>Unleaded Gas</th>
+                </tr>
+            </thead>
+            <tbody></tbody>    
+        </table>
+    </template>
 
 
     <script src="SocialSecurityCalculator.js"></script> <!-- logic to help determine Social Security benefits -->
